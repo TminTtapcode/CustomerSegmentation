@@ -1,0 +1,237 @@
+{
+  "ruleset_version": "v1.0.0",
+  "ruleset_name": "Evidence-Based Prescriptive Marketing Decision Ruleset",
+  "created_at": "2026-11-09T16:45:00Z",
+  "observation_cutoff": "2020-02-01T00:00:00Z",
+  "compatible_model_version": "v1.0.0-f1-std-k4",
+  "description": "Ruleset for generating explainable marketing recommendations from customer behavioral evidence and segment profiles. All recommendations are research proposals with execution eligibility pending consent verification.",
+  
+  "marketing_goals": {
+    "RETAIN_HIGH_VALUE": {
+      "id": "RETAIN_HIGH_VALUE",
+      "name_en": "Retain High-Value Customers",
+      "name_vi": "Bảo tồn & Gắn kết Khách hàng Giá trị Cao",
+      "description": "Protect the highest revenue-generating customer relationships through proactive recognition, exclusive privileges, and personalized loyalty engagement.",
+      "primary_kpi": "vip_retention_rate",
+      "secondary_kpi": "vip_average_order_value",
+      "limitations": "High-touch incentives must not erode gross margin; requires existing brand affinity."
+    },
+    "ENCOURAGE_REPEAT_PURCHASE": {
+      "id": "ENCOURAGE_REPEAT_PURCHASE",
+      "name_en": "Encourage Repeat Purchase",
+      "name_vi": "Kích thích Đơn hàng Mua Lặp lại Tiếp theo",
+      "description": "Accelerate customer transition from single-time or occasional buyers into recurring repeat shoppers through relevant product recommendations and satisfaction checks.",
+      "primary_kpi": "repeat_purchase_rate_60d",
+      "secondary_kpi": "time_between_purchases_days",
+      "limitations": "Timing must align with product replenishment cycles (cosmetics typically 30-60 days)."
+    },
+    "REENGAGE_INACTIVE": {
+      "id": "REENGAGE_INACTIVE",
+      "name_en": "Re-engage At-Risk / Inactive Customers",
+      "name_vi": "Tái Kích hoạt Khách hàng Đang Hạ nhiệt / Nguy cơ Rời bỏ",
+      "description": "Win back customers who previously demonstrated substantial spending or purchase frequency but have ceased activity over the last 30-60 days.",
+      "primary_kpi": "reactivation_session_rate",
+      "secondary_kpi": "winback_conversion_rate",
+      "limitations": "Risk of high communication fatigue if customers left due to poor product satisfaction."
+    },
+    "SUPPORT_CART_COMPLETION": {
+      "id": "SUPPORT_CART_COMPLETION",
+      "name_en": "Support Cart Completion",
+      "name_vi": "Hỗ trợ Hoàn tất Giỏ hàng & Tháo gỡ Rào cản Thanh toán",
+      "description": "Assist users with active product intent who added items to cart in the last 30 days but have not completed checkout.",
+      "primary_kpi": "cart_to_purchase_conversion_rate",
+      "secondary_kpi": "checkout_abandonment_reduction",
+      "limitations": "In-session discounts risk training shoppers to delay checkout intentionally (coupon hunting)."
+    },
+    "INCREASE_PRODUCT_DISCOVERY": {
+      "id": "INCREASE_PRODUCT_DISCOVERY",
+      "name_en": "Increase Product Discovery",
+      "name_vi": "Kích thích Tìm hiểu & Khám phá Danh mục Sản phẩm",
+      "description": "Guide engaged users who browse multiple products without carting toward high-converting categories, starter bundles, and social proof.",
+      "primary_kpi": "product_detail_view_depth",
+      "secondary_kpi": "first_time_cart_rate",
+      "limitations": "Information overload if content is generic rather than category-specific."
+    },
+    "LOW_COST_NURTURE": {
+      "id": "LOW_COST_NURTURE",
+      "name_en": "Low-Cost Brand Nurturing",
+      "name_vi": "Duy trì Hiện diện Thương hiệu Chi phí Thấp",
+      "description": "Maintain low-frequency, high-efficiency brand awareness for occasional visitors and low-spend dormant users through content newsletters.",
+      "primary_kpi": "newsletter_open_rate",
+      "secondary_kpi": "passive_unsubscribe_rate",
+      "limitations": "Low conversion yields; must strictly control delivery cost per contact."
+    },
+    "NO_ACTION": {
+      "id": "NO_ACTION",
+      "name_en": "No Action / Holdout Suppression",
+      "name_vi": "Không Can thiệp Tiếp thị / Giữ Khoảng cách Tiếp xúc",
+      "description": "Explicitly refrain from marketing outreach to preserve customer goodwill, avoid spam fatigue, or protect budget when evidence is insufficient.",
+      "primary_kpi": "unsolicited_contact_rate",
+      "secondary_kpi": "budget_wastage_avoided",
+      "limitations": "Does not generate incremental revenue; acts purely as a cost and fatigue safeguard."
+    }
+  },
+
+  "candidate_tactics": {
+    "TAC_LOYALTY_VIP": {
+      "tactic_id": "TAC_LOYALTY_VIP",
+      "name_en": "VIP Loyalty Privileges & Early Access",
+      "name_vi": "Chương trình Đặc quyền VIP & Mở bán Sớm",
+      "target_goal": "RETAIN_HIGH_VALUE",
+      "priority": 10,
+      "eligible_cohorts": ["BUYER"],
+      "expected_mechanism": "Strengthen emotional brand connection and reward repeat spending with non-cash perks (VIP concierges, sample gifts, early collection access).",
+      "evaluation_kpi": "vip_retention_rate_90d",
+      "reason_codes": ["HIGH_HISTORICAL_SPEND", "REPEAT_PURCHASER", "ACTIVE_RECENT_ENGAGEMENT"],
+      "prerequisites": ["VIP tier threshold verified", "Active account status"],
+      "risks_and_limitations": "Expectation inflation; VIPs may resist return to standard promotional terms."
+    },
+    "TAC_CART_RECOVERY": {
+      "tactic_id": "TAC_CART_RECOVERY",
+      "name_en": "Cart Recovery Assistance & Friction Check",
+      "name_vi": "Hỗ trợ Hoàn tất Giỏ hàng & Tháo gỡ Rào cản",
+      "target_goal": "SUPPORT_CART_COMPLETION",
+      "priority": 20,
+      "eligible_cohorts": ["BUYER", "NON_BUYER"],
+      "expected_mechanism": "Remind users of items left in cart within optimal intent window, offer customer service help or shipping clarifications.",
+      "evaluation_kpi": "cart_checkout_rate",
+      "reason_codes": ["ACTIVE_CART_ADDITIONS", "HIGH_PURCHASE_INTENT", "CHECKOUT_BARRIER_SUSPECTED"],
+      "prerequisites": ["Valid saved cart session items", "Contact channel available"],
+      "risks_and_limitations": "Sending too frequently irritates shoppers; discounts may cannibalize margin."
+    },
+    "TAC_CROSS_SELL": {
+      "tactic_id": "TAC_CROSS_SELL",
+      "name_en": "Personalized Complementary Cross-Sell",
+      "name_vi": "Gợi ý Sản phẩm Bổ trợ Cá nhân hóa",
+      "target_goal": "ENCOURAGE_REPEAT_PURCHASE",
+      "priority": 30,
+      "eligible_cohorts": ["BUYER"],
+      "expected_mechanism": "Present complementary products (e.g. makeup remover for foundation buyers) based on observed category co-browsing.",
+      "evaluation_kpi": "cross_category_adoption_rate",
+      "reason_codes": ["RECENT_TRANSACTION", "ACTIVE_CATEGORY_BROWSING", "BASKET_EXPANSION_OPPORTUNITY"],
+      "prerequisites": ["Purchase category history", "Catalog affinity model"],
+      "risks_and_limitations": "Irrelevant recommendations diminish trust in recommendation engine."
+    },
+    "TAC_POST_PURCHASE_CARE": {
+      "tactic_id": "TAC_POST_PURCHASE_CARE",
+      "name_en": "Post-Purchase Care & Onboarding Guide",
+      "name_vi": "Chăm sóc Sau Mua Hàng & Hướng dẫn Sử dụng",
+      "target_goal": "ENCOURAGE_REPEAT_PURCHASE",
+      "priority": 40,
+      "eligible_cohorts": ["BUYER"],
+      "expected_mechanism": "Reinforce purchase confidence, provide usage instructions, and proactively address dissatisfaction to drive 2nd purchase.",
+      "evaluation_kpi": "second_order_conversion_rate",
+      "reason_codes": ["RECENT_PURCHASE", "SLACKENING_RECENT_VISITS", "EXPERIENCE_CHECK_WINDOW"],
+      "prerequisites": ["Recent purchase record (< 45 days)"],
+      "risks_and_limitations": "Must feel like genuine customer service, not a hidden sales pitch."
+    },
+    "TAC_WINBACK_SURVEY": {
+      "tactic_id": "TAC_WINBACK_SURVEY",
+      "name_en": "Win-Back Survey & Selective Reactivation Incentive",
+      "name_vi": "Khảo sát Tái Kích hoạt & Ưu đãi Trở lại Chọn lọc",
+      "target_goal": "REENGAGE_INACTIVE",
+      "priority": 50,
+      "eligible_cohorts": ["BUYER"],
+      "expected_mechanism": "Inquire why customer stopped visiting and offer a curated incentive tied to their historical spend level.",
+      "evaluation_kpi": "winback_reactivation_rate",
+      "reason_codes": ["MODERATE_OR_HIGH_PAST_VALUE", "PROLONGED_INACTIVITY", "CHURN_RISK_DETECTED"],
+      "prerequisites": ["Historical spend >= 30.0", "Inactivity >= 30 days"],
+      "risks_and_limitations": "Low response rate typical of win-back; incentives should be limited to high-value history."
+    },
+    "TAC_PRODUCT_EDU": {
+      "tactic_id": "TAC_PRODUCT_EDU",
+      "name_en": "Beauty Routine Education & Category Starter Kits",
+      "name_vi": "Hướng dẫn Làm đẹp & Khám phá Bộ Sản phẩm Mẫu",
+      "target_goal": "INCREASE_PRODUCT_DISCOVERY",
+      "priority": 60,
+      "eligible_cohorts": ["BUYER", "NON_BUYER"],
+      "expected_mechanism": "Lower decision paralysis for exploratory shoppers by providing curated routines, reviews, and starter sample packs.",
+      "evaluation_kpi": "first_time_buyer_conversion",
+      "reason_codes": ["ENGAGED_EXPLORER", "ZERO_CART_FRICTION", "CONSIDERATION_STAGE"],
+      "prerequisites": ["Sufficient views (>= 5) without purchase"],
+      "risks_and_limitations": "Educational content production requires editorial resources."
+    },
+    "TAC_LOW_COST_NURTURE": {
+      "tactic_id": "TAC_LOW_COST_NURTURE",
+      "name_en": "Low-Cost Seasonal Trends Newsletter",
+      "name_vi": "Bản tin Xu hướng Mùa Chi phí Thấp",
+      "target_goal": "LOW_COST_NURTURE",
+      "priority": 70,
+      "eligible_cohorts": ["BUYER", "NON_BUYER"],
+      "expected_mechanism": "Deliver passive, high-appeal seasonal content (e.g. spring trends, skincare tips) via low-cost aggregated broadcasts.",
+      "evaluation_kpi": "newsletter_open_rate",
+      "reason_codes": ["LOW_OR_DORMANT_ACTIVITY", "COST_CONSTRAINED_REACH", "PASSIVE_ENGAGEMENT"],
+      "prerequisites": ["Email channel eligibility"],
+      "risks_and_limitations": "Unsubscribe risk if sent more frequently than monthly."
+    },
+    "TAC_NO_ACTION": {
+      "tactic_id": "TAC_NO_ACTION",
+      "name_en": "No Marketing Action / Contact Suppression",
+      "name_vi": "Không Can thiệp Tiếp thị / Bảo vệ Tần suất Tiếp xúc",
+      "target_goal": "NO_ACTION",
+      "priority": 99,
+      "eligible_cohorts": ["BUYER", "NON_BUYER"],
+      "expected_mechanism": "Zero outbound communications to protect customer goodwill, avoid spam blacklisting, and conserve marketing resources.",
+      "evaluation_kpi": "unsolicited_contact_prevention_rate",
+      "reason_codes": ["PROLONGED_DORMANCY", "LOW_HISTORICAL_VALUE", "CONTACT_FATIGUE_PREVENTION", "INSUFFICIENT_EVIDENCE"],
+      "prerequisites": [],
+      "risks_and_limitations": "Does not generate direct sales; relies on natural brand recall."
+    }
+  },
+
+  "non_buyer_tiering_rules": {
+    "HIGH_INTENT": {
+      "condition": "(cart_sessions_30d >= 1 OR carts_30d >= 1) AND (sessions_30d >= 2 OR views_30d >= 5)",
+      "description": "Active in last 30 days with demonstrated cart addition; strong candidate for checkout assistance.",
+      "recommended_tactic": "TAC_CART_RECOVERY",
+      "alternative_tactic": "TAC_PRODUCT_EDU"
+    },
+    "EXPLORING": {
+      "condition": "(sessions_30d >= 2 OR views_30d >= 5) AND (cart_sessions_30d == 0 AND carts_30d == 0)",
+      "description": "Active browsing across multiple items without carting; candidate for product education and starter kits.",
+      "recommended_tactic": "TAC_PRODUCT_EDU",
+      "alternative_tactic": "TAC_LOW_COST_NURTURE"
+    },
+    "LOW_ENGAGEMENT": {
+      "condition": "sessions_30d >= 1 AND sessions_30d < 2 AND views_30d < 5 AND (cart_sessions_30d == 0 AND carts_30d == 0)",
+      "description": "Single brief visit in last 30 days without cart intent; candidate for low-cost passive newsletter.",
+      "recommended_tactic": "TAC_LOW_COST_NURTURE",
+      "alternative_tactic": "TAC_NO_ACTION"
+    },
+    "INACTIVE": {
+      "condition": "sessions_30d == 0",
+      "description": "No sessions in last 30 days; suppress marketing outreach to prevent spam fatigue and budget waste.",
+      "recommended_tactic": "TAC_NO_ACTION",
+      "alternative_tactic": "TAC_LOW_COST_NURTURE"
+    }
+  },
+
+  "guardrails": [
+    {
+      "guardrail_id": "G1_EXECUTION_CONSENT_CHECK",
+      "rule": "Set execution_eligibility = 'PENDING_CONSENT' for all generated recommendations.",
+      "rationale": "REES46 dataset does not record explicit user marketing opt-in or privacy consent. Recommendations must not be dispatched automatically without enterprise consent confirmation."
+    },
+    {
+      "guardrail_id": "G2_DATA_QUALITY_FALLBACK",
+      "rule": "IF user_id IS NULL OR user_id == '' THEN route to TAC_NO_ACTION with reason INSUFFICIENT_DATA.",
+      "rationale": "Corrupt or unidentified visitor records must not receive marketing actions."
+    },
+    {
+      "guardrail_id": "G3_BUDGET_PROTECTION_DEEP_DORMANT",
+      "rule": "IF cohort == 'BUYER' AND recency_days > 90 AND monetary < 20.0 AND sessions_30d == 0 THEN suppress to TAC_NO_ACTION.",
+      "rationale": "Outreach costs on deep-dormant, single-item low-value purchasers ($< $20) typically exceed expected return."
+    },
+    {
+      "guardrail_id": "G4_CART_INTENT_PRECEDENCE",
+      "rule": "IF cart_sessions_30d >= 1 THEN TAC_CART_RECOVERY takes precedence over generic educational or newsletter tactics.",
+      "rationale": "Active shopping cart addition in the last 30 days represents the strongest immediate purchase signal across all customer cohorts."
+    },
+    {
+      "guardrail_id": "G5_CONTACT_FATIGUE_PREVENTION",
+      "rule": "IF cohort == 'NON_BUYER' AND sessions_30d == 0 THEN route to TAC_NO_ACTION.",
+      "rationale": "Over 70% of non-buyers have not visited for over 30 days; mass cold emailing leads to high spam complaint rates."
+    }
+  ]
+}
+

@@ -1,0 +1,31 @@
+{
+  "manifest_version": "v1.0.0",
+  "created_at": "2026-11-10T09:28:19.583209+00:00",
+  "total_files": 6,
+  "files": {
+    "summary_snapshot.json": {
+      "size_kb": 2.9,
+      "sha256": "fc8fc522b014188d43ef82abc32a7d73343e521f3e3a24873f60d6fbdcf2a00e"
+    },
+    "segments_snapshot.json": {
+      "size_kb": 7.4,
+      "sha256": "a15685e0d0116128a06c106e1f5823252198587ecf5d8d98003480418637075f"
+    },
+    "recommendations_snapshot.json": {
+      "size_kb": 16.29,
+      "sha256": "68249090510346f68db90a68cef63519a6f25b1bd08030d71078f61a2be7ca39"
+    },
+    "holdout_evaluation_snapshot.json": {
+      "size_kb": 5.52,
+      "sha256": "02d42d678f199d45be478fd2c4ab061bed6752d38ddcdc0ebb714bab1f1beac2"
+    },
+    "model_system_insights_snapshot.json": {
+      "size_kb": 1.17,
+      "sha256": "884a2f063e67cf9178dcc91d1b118e8f7e8a3865b72228d2f8932b0d147e5989"
+    },
+    "ivre_dashboard_snapshot.json": {
+      "size_kb": 33.71,
+      "sha256": "ce12d97ac8d1ec76b2eca3f4b2b7bc7952fc2b5f918ddf3a307cb74007021dbd"
+    }
+  }
+}

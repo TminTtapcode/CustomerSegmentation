@@ -1,0 +1,13 @@
+# Chỉ cần cài các thư viện này khi vào P1/P2. Phase 0 tests dùng Python stdlib.
+duckdb
+pandas
+numpy
+pyarrow
+scikit-learn
+scipy
+psutil
+PyYAML
+matplotlib
+pytest
+# Optional: seaborn, umap-learn, memory-profiler, jupyter
+# Sau khi thiết lập máy, khóa phiên bản vào requirements-lock.txt để reproducible.

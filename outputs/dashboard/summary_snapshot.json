@@ -1,0 +1,94 @@
+{
+  "metadata": {
+    "schema_version": "v1.0.0",
+    "generated_at": "2026-11-10T09:28:19.427361+00:00",
+    "source_dataset": "REES46 eCommerce Events (Cosmetics Category)",
+    "source_period": "2019-10-01 to 2020-02-29 (152 days)",
+    "observation_window": {
+      "start": "2019-10-01T00:00:00Z",
+      "cutoff": "2020-02-01T00:00:00Z",
+      "duration_days": 123
+    },
+    "holdout_window": {
+      "start": "2020-02-01T00:00:00Z",
+      "end": "2020-03-01T00:00:00Z",
+      "duration_days": 29,
+      "evaluation_type": "Out-of-Time Historical Validation"
+    },
+    "disclaimer": "REES46 Cosmetics Research Demo — Historical Data 2019–2020. Read-only Research Analytics. Not live IVRE fashion customers.",
+    "data_quality_summary": {
+      "raw_events": 20692840,
+      "deduplicated_events": 1109098,
+      "clean_events": 19583742,
+      "observation_events": 15667350,
+      "holdout_events": 3916392,
+      "compression_ratio": "4.92x (CSV 2,321 MB -> Parquet 471.7 MB)",
+      "benchmark_speedup": "8.09x median query speedup",
+      "user_id_missing_rate": 0.0,
+      "user_session_missing_rate": 0.00022,
+      "purchase_session_proxy_validity": "100.0% purchases have valid session"
+    }
+  },
+  "customer_overview": {
+    "total_observed_customers": 1341499,
+    "buyers_count": 92652,
+    "buyers_percentage": 6.9066,
+    "non_buyers_count": 1248847,
+    "non_buyers_percentage": 93.0934,
+    "total_observed_sessions": 3614959,
+    "observed_purchase_sessions": 126503,
+    "total_purchase_events": 965158,
+    "total_monetary_observed": 5140880.08
+  },
+  "behavioral_funnel": {
+    "event_level": [
+      {
+        "step": "view",
+        "count": 9660505,
+        "pct": 46.68
+      },
+      {
+        "step": "cart",
+        "count": 5770086,
+        "pct": 27.88
+      },
+      {
+        "step": "remove_from_cart",
+        "count": 3971488,
+        "pct": 19.19
+      },
+      {
+        "step": "purchase",
+        "count": 1290761,
+        "pct": 6.24
+      }
+    ],
+    "session_level": [
+      {
+        "step": "total_sessions",
+        "count": 3614959,
+        "rate_from_prev": 100.0,
+        "stage_desc": "All Valid User Sessions"
+      },
+      {
+        "step": "cart_sessions",
+        "count": 800307,
+        "rate_from_prev": 22.1388,
+        "stage_desc": "Sessions with >=1 Cart Addition"
+      },
+      {
+        "step": "purchase_sessions",
+        "count": 126503,
+        "rate_from_prev": 15.8068,
+        "stage_desc": "Sessions with >=1 Purchase"
+      }
+    ],
+    "dropoff_metrics": {
+      "cart_session_rate": 22.1388,
+      "purchase_session_rate": 3.4994,
+      "cart_session_no_purchase_rate": 87.1294,
+      "no_purchase_sessions_count": 697337,
+      "semantic_note": "Cart Session No-Purchase Rate is measured strictly within the same session. Does not assert permanent cross-device abandonment."
+    }
+  }
+}

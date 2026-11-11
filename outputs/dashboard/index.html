@@ -1,0 +1,2034 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Intelligence & Marketing Decision Support — REES46 Research Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Clean Light Minimal Palette */
+      --bg-app: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --bg-muted: #e2e8f0;
+      --border-light: #e2e8f0;
+      --border-subtle: #cbd5e1;
+      
+      /* Typography */
+      --text-main: #0f172a;       /* Slate 900 */
+      --text-body: #334155;       /* Slate 700 */
+      --text-muted: #64748b;      /* Slate 500 */
+      --text-light: #94a3b8;      /* Slate 400 */
+      
+      /* Brand & Accents */
+      --primary: #2563eb;         /* Blue 600 */
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --primary-border: #bfdbfe;
+
+      /* Consistent Functional Cluster Colors */
+      --cluster-vip: #4f46e5;       /* Cluster 1: VIP Champions (Indigo) */
+      --cluster-vip-bg: #eef2ff;
+      --cluster-vip-border: #c7d2fe;
+
+      --cluster-active: #0d9488;    /* Cluster 3: Active Repeat Prospects (Teal) */
+      --cluster-active-bg: #f0fdfa;
+      --cluster-active-border: #99f6e4;
+
+      --cluster-risk: #e11d48;      /* Cluster 2: At-Risk Spenders (Rose) */
+      --cluster-risk-bg: #fff1f2;
+      --cluster-risk-border: #fecdd3;
+
+      --cluster-dormant: #64748b;   /* Cluster 0: Dormant Buyers (Slate) */
+      --cluster-dormant-bg: #f8fafc;
+      --cluster-dormant-border: #e2e8f0;
+
+      --accent-amber: #d97706;
+      --accent-amber-bg: #fffbeb;
+      --accent-amber-border: #fde68a;
+
+      /* Shapes & Spacing */
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-app);
+      color: var(--text-body);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Tabular numbers for clean numeric alignment */
+    .num, .metric-val, code {
+      font-variant-numeric: tabular-nums;
+      font-family: var(--font-mono);
+    }
+
+    /* Top Research Banner */
+    .top-banner {
+      background-color: #ffffff;
+      border-bottom: 1px solid var(--border-light);
+      padding: 8px 32px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .badge-research {
+      background-color: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.3px;
+    }
+    .badge-pending {
+      background-color: #fff7ed;
+      color: #c2410c;
+      border: 1px solid #ffedd5;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 11px;
+    }
+
+    /* Header Bar */
+    header {
+      background-color: #ffffff;
+      border-bottom: 1px solid var(--border-light);
+      padding: 18px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .brand-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -0.3px;
+    }
+    .brand-logo {
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 14px;
+    }
+    .brand-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .header-pill {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-body);
+    }
+    .header-pill strong { color: var(--text-main); }
+
+    /* Navigation Bar */
+    nav.nav-bar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-light);
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    nav.nav-bar::-webkit-scrollbar {
+      display: none;
+    }
+    .nav-btn {
+      padding: 13px 18px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+      min-height: 44px;
+    }
+    .nav-btn:hover {
+      color: var(--text-main);
+      border-bottom-color: var(--border-subtle);
+    }
+    .nav-btn.active {
+      color: var(--primary);
+      font-weight: 600;
+      border-bottom-color: var(--primary);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 24px 32px 64px 32px;
+    }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; animation: tabFade 0.2s ease-in-out; }
+    @keyframes tabFade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Section Headers */
+    .view-header {
+      margin-bottom: 20px;
+    }
+    .view-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.3px;
+    }
+    .view-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      max-width: 960px;
+    }
+
+    /* Grid Layouts */
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px; }
+    .grid-4 > *, .grid-3 > *, .grid-2 > * { min-width: 0; }
+    .comp-charts-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .nav-short { display: none; }
+    .nav-full { display: inline; }
+    @media (max-width: 1080px) {
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 880px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .comp-charts-grid { grid-template-columns: 1fr; gap: 16px; }
+    }
+    @media (max-width: 720px) {
+      .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+      .comp-charts-grid { grid-template-columns: 1fr; gap: 16px; }
+      header, .top-banner, nav.nav-bar, .container { padding-left: 12px; padding-right: 12px; }
+      .top-banner { font-size: 11px; padding: 6px 12px; gap: 6px; }
+      header { padding: 12px 12px; gap: 8px; }
+      .brand-title { font-size: 16px; }
+      .brand-subtitle { font-size: 11px; }
+      .nav-btn { padding: 10px 10px; font-size: 12px; min-height: 44px; }
+      .container { padding-top: 14px; padding-bottom: 40px; }
+      .card { padding: 14px 14px; }
+    }
+    @media (max-width: 640px) {
+      .nav-short { display: inline; }
+      .nav-full { display: none; }
+      nav.nav-bar {
+        padding: 0 4px;
+        gap: 2px;
+        justify-content: space-between;
+      }
+      .nav-btn {
+        padding: 10px 4px;
+        font-size: 11.5px;
+        min-height: 44px;
+        flex: 1 1 0;
+        text-align: center;
+        justify-content: center;
+      }
+    }
+    @media (max-width: 480px) {
+      .header-badges { display: none; }
+      .brand-title { font-size: 14px; }
+      .brand-subtitle { display: none; }
+      .brand-logo { width: 22px; height: 22px; font-size: 11px; }
+      .top-banner { font-size: 10px; padding: 4px 8px; gap: 4px; }
+      header { padding: 8px 8px; }
+      nav.nav-bar { padding: 0 2px; gap: 1px; }
+      .nav-btn { padding: 10px 2px; font-size: 11px; min-height: 44px; }
+      .container { padding-left: 6px; padding-right: 6px; padding-top: 8px; }
+      .card { padding: 12px 10px; }
+      .card-title { font-size: 13px; flex-direction: column; align-items: flex-start; gap: 4px; }
+      .comp-bar-header { flex-direction: column; align-items: flex-start; gap: 2px; }
+      .comp-bar-header span:last-child { font-size: 10px; }
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      min-width: 0;
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    
+    /* KPI Card Style */
+    .kpi-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      box-shadow: var(--shadow-sm);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 0;
+    }
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .kpi-number {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-main);
+      font-variant-numeric: tabular-nums;
+      font-family: var(--font-sans);
+      margin: 6px 0 3px 0;
+      letter-spacing: -0.5px;
+    }
+    .kpi-footer {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .kpi-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-subtle);
+      color: var(--text-body);
+    }
+
+    /* Scannable Insight Cards */
+    .insight-card {
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      border-left: 4px solid var(--primary);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .insight-card-header {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .insight-card-text {
+      font-size: 13px;
+      color: var(--text-body);
+      line-height: 1.5;
+    }
+
+    /* Segment Card */
+    .segment-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      height: 100%;
+      min-width: 0;
+    }
+    .segment-card-top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      border-top-left-radius: var(--radius-md);
+      border-top-right-radius: var(--radius-md);
+    }
+    .segment-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      background: var(--bg-subtle);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      margin: 12px 0;
+      font-size: 12px;
+    }
+    .segment-metric-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .segment-metric-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .segment-metric-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Visual Comparative Bars for Segments */
+    .comp-bar-container {
+      margin-bottom: 12px;
+    }
+    .comp-bar-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .comp-bar-track {
+      height: 10px;
+      background: var(--bg-muted);
+      border-radius: 5px;
+      overflow: hidden;
+      display: flex;
+    }
+
+    /* Visual Error Bars Plot for Holdout Wilson CI */
+    .ci-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 13px;
+    }
+    .ci-label {
+      width: 140px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .ci-plot-area {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+      height: 24px;
+      background: var(--bg-subtle);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+    }
+    .ci-band {
+      position: absolute;
+      height: 6px;
+      border-radius: 3px;
+      opacity: 0.6;
+    }
+    .ci-point {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      top: 50%;
+      border: 2px solid #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .ci-val-text {
+      width: 160px;
+      text-align: right;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+    @media (max-width: 640px) {
+      .ci-row {
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .ci-label {
+        width: 100%;
+      }
+      .ci-plot-area {
+        width: 100%;
+        flex: 1 1 100%;
+        margin-bottom: 2px;
+      }
+      .ci-val-text {
+        width: 100%;
+        text-align: right;
+        font-size: 11px;
+      }
+    }
+
+    /* Horizontal Bar Row */
+    .bar-row { margin-bottom: 12px; }
+    .bar-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: var(--text-body);
+    }
+    .bar-title { font-weight: 600; color: var(--text-main); }
+    .bar-track {
+      height: 16px;
+      background: var(--bg-muted);
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      position: relative;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+      display: flex;
+      align-items: center;
+      padding-left: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      color: #fff;
+    }
+
+    /* Comparison Table */
+    .table-responsive {
+      overflow-x: auto;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      background: #ffffff;
+      width: 100%;
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+    table.data-table th {
+      background: var(--bg-subtle);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-light);
+      white-space: nowrap;
+    }
+    table.data-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--border-light);
+      color: var(--text-body);
+    }
+    table.data-table tr:last-child td { border-bottom: none; }
+    table.data-table tr:hover td { background-color: #f8fafc; }
+    .text-right { text-align: right; }
+
+    /* Segment Pill Badges */
+    .badge-seg {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .badge-seg-1 { background: var(--cluster-vip-bg); color: var(--cluster-vip); border: 1px solid var(--cluster-vip-border); }
+    .badge-seg-3 { background: var(--cluster-active-bg); color: var(--cluster-active); border: 1px solid var(--cluster-active-border); }
+    .badge-seg-2 { background: var(--cluster-risk-bg); color: var(--cluster-risk); border: 1px solid var(--cluster-risk-border); }
+    .badge-seg-0 { background: var(--cluster-dormant-bg); color: var(--cluster-dormant); border: 1px solid var(--cluster-dormant-border); }
+
+    /* Tooltip styling */
+    .tooltip-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: var(--bg-muted);
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 700;
+      cursor: help;
+      position: relative;
+    }
+    .tooltip-icon:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0f172a;
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      font-weight: 400;
+      line-height: 1.4;
+      white-space: normal;
+      width: 240px;
+      z-index: 100;
+      box-shadow: var(--shadow-md);
+      pointer-events: none;
+    }
+
+    /* Archetype Explorer UI */
+    .arch-container {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 16px;
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    @media (max-width: 860px) {
+      .arch-container { grid-template-columns: 1fr; }
+      .arch-sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--border-light);
+        max-height: 180px;
+      }
+    }
+    .arch-sidebar {
+      background: var(--bg-subtle);
+      border-right: 1px solid var(--border-light);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      max-height: 520px;
+    }
+    .arch-item {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-light);
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .arch-item:hover { background: #ffffff; }
+    .arch-item.active {
+      background: #ffffff;
+      border-left: 3px solid var(--primary);
+    }
+    .arch-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Clean Footer */
+    footer {
+      border-top: 1px solid var(--border-light);
+      background: #ffffff;
+      padding: 20px 32px;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Research Demarcation Banner -->
+  <div class="top-banner">
+    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+      <span class="badge-research">Research Demo</span>
+      <span><strong>REES46 eCommerce Historical Data</strong> &bull; Kỳ quan sát: 01/10/2019 – 01/02/2020 &bull; Read-only Analytical Sandbox</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span class="badge-pending">100% PENDING_CONSENT</span>
+      <span style="font-size: 11px; color: var(--text-light);">v1.0.0 (Freeze)</span>
+    </div>
+  </div>
+
+  <!-- App Header -->
+  <header>
+    <div>
+      <div class="brand-title">
+        <div class="brand-logo">IV</div>
+        <span>IVRE ATELIER &bull; Customer Intelligence</span>
+      </div>
+      <div class="brand-subtitle">
+        Khung Phân Tích Hành Vi, Phân Cụm &amp; Hệ Thống Chỉ Dẫn Quyết Định Tiếp Thị Có Trách Nhiệm
+      </div>
+    </div>
+    <div class="header-badges">
+      <div class="header-pill">Dân số quan sát: <strong>1,341,499</strong></div>
+      <div class="header-pill">Kỳ quan sát: <strong>10/2019 – 01/2020</strong></div>
+      <div class="header-pill">Tập kiểm chứng: <strong>Tháng 02/2020</strong></div>
+    </div>
+  </header>
+
+  <!-- Sticky Compact Navigation Tabs -->
+  <nav class="nav-bar">
+    <button class="nav-btn active" onclick="setTab('overview', this)">
+      <span class="nav-full">1. Tổng quan</span>
+      <span class="nav-short">Tổng quan</span>
+    </button>
+    <button class="nav-btn" onclick="setTab('segmentation', this)">
+      <span class="nav-full">2. Phân khúc</span>
+      <span class="nav-short">Phân khúc</span>
+    </button>
+    <button class="nav-btn" onclick="setTab('funnel', this)">
+      <span class="nav-full">3. Hành vi &amp; Phễu</span>
+      <span class="nav-short">Phễu</span>
+    </button>
+    <button class="nav-btn" onclick="setTab('decisions', this)">
+      <span class="nav-full">4. Chiến thuật Marketing</span>
+      <span class="nav-short">Chiến thuật</span>
+    </button>
+    <button class="nav-btn" onclick="setTab('insights', this)">
+      <span class="nav-full">5. Mô hình &amp; Hệ thống</span>
+      <span class="nav-short">Mô hình</span>
+    </button>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="container">
+
+    <!-- =================================================================== -->
+    <!-- TAB 1: TỔNG QUAN (EXECUTIVE OVERVIEW) -->
+    <!-- =================================================================== -->
+    <div id="pane-overview" class="tab-pane active">
+      <div class="view-header">
+        <h2 class="view-title">Tổng quan Điều hành &amp; Cơ cấu Khách hàng</h2>
+        <p class="view-desc">
+          Toàn cảnh cơ cấu dân số khách hàng, khối lượng giao dịch và hiệu suất chuyển đổi tổng thể được trích xuất từ 19.58M sự kiện Parquet sạch xuyên suốt 123 ngày quan sát trước mốc cutoff 01/02/2020.
+        </p>
+      </div>
+
+      <!-- 4 Hero KPI Cards -->
+      <div class="grid-4">
+        <div class="kpi-card">
+          <div class="kpi-label">
+            <span>Tổng khách hàng quan sát</span>
+            <span class="tooltip-icon" data-tooltip="Tổng số khách hàng duy nhất có định danh hợp lệ trong kỳ quan sát 10/2019 - 01/2020.">?</span>
+          </div>
+          <div class="kpi-number">1,341,499</div>
+          <div class="kpi-footer">
+            <span class="kpi-tag" style="background: #ecfdf5; color: #065f46;">100% Hợp lệ</span>
+            <span>0% khuyết thiếu user_id</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">
+            <span>Khách đã mua (Buyers)</span>
+            <span class="tooltip-icon" data-tooltip="Khách hàng phát sinh ít nhất 1 phiên giao dịch mua hàng hợp lệ trước mốc cutoff.">?</span>
+          </div>
+          <div class="kpi-number" style="color: var(--cluster-vip);">92,652</div>
+          <div class="kpi-footer">
+            <span class="kpi-tag" style="background: var(--cluster-vip-bg); color: var(--cluster-vip);">6.91% Dân số</span>
+            <span>126,503 phiên mua</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">
+            <span>Khách chưa mua (Non-Buyers)</span>
+            <span class="tooltip-icon" data-tooltip="Người dùng chỉ duyệt xem hoặc thêm giỏ nhưng chưa hoàn tất thanh toán. Được tách riêng vào 4 tầng tương tác.">?</span>
+          </div>
+          <div class="kpi-number" style="color: #475569;">1,248,847</div>
+          <div class="kpi-footer">
+            <span class="kpi-tag">93.09% Dân số</span>
+            <span>4 Tầng tương tác</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label">
+            <span>Tổng doanh thu quan sát</span>
+            <span class="tooltip-icon" data-tooltip="Tổng giá trị sự kiện mua hàng hợp lệ đã kiểm toán (loại trừ giá âm và bất thường). Không phải GMV kế toán.">?</span>
+          </div>
+          <div class="kpi-number" style="color: #059669;">$5.14M</div>
+          <div class="kpi-footer">
+            <span class="kpi-tag" style="background: #ecfdf5; color: #065f46;">$5,140,880.08</span>
+            <span>Trung vị: $33.17 / khách</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Concise, Scannable Business Insight Cards -->
+      <div class="grid-3" style="margin-bottom: 24px;">
+        <div class="insight-card" style="border-left-color: var(--cluster-vip);">
+          <div class="insight-card-header" style="color: var(--cluster-vip);">
+            <span>1. Tập trung giá trị (Pareto)</span>
+          </div>
+          <div class="insight-card-text">
+            Chỉ <strong>6.91% khách mua (92,652 người)</strong> đóng góp toàn bộ <strong>$5.14 triệu doanh thu</strong> quan sát. Nhóm 93.1% người dùng chưa mua cần chiến lược phân tầng nuôi dưỡng, không áp dụng khuyến mãi đại trà.
+          </div>
+        </div>
+
+        <div class="insight-card" style="border-left-color: var(--accent-amber);">
+          <div class="insight-card-header" style="color: var(--accent-amber);">
+            <span>2. Cơ hội chuyển đổi giỏ hàng</span>
+          </div>
+          <div class="insight-card-text">
+            Có <strong>34,061 khách chưa mua</strong> phát sinh tín hiệu thêm giỏ trong 30 ngày gần nhất. Đây là nhóm có cơ hội chuyển đổi đơn đầu tiên cao nhất nếu được hỗ trợ tháo gỡ rào cản thanh toán.
+          </div>
+        </div>
+
+        <div class="insight-card" style="border-left-color: #64748b;">
+          <div class="insight-card-header" style="color: #64748b;">
+            <span>3. Bảo vệ ngân sách tiếp thị</span>
+          </div>
+          <div class="insight-card-text">
+            Hệ thống kích hoạt Guardrails G3/G5 để ngưng liên hệ với <strong>892,508 tài khoản vãng lai và ngủ đông sâu</strong>, giúp tiết kiệm giả định từ <strong>$4,462 – $17,850 mỗi tuần</strong> và chống mỏi mệt gửi tin.
+          </div>
+        </div>
+      </div>
+
+      <!-- Population Cohort Visual Split -->
+      <div class="card">
+        <div class="card-title">
+          <span>Cơ cấu Dân số &amp; Nguyên tắc Kiến trúc Tách đôi (Cohort Partitioning)</span>
+          <span style="font-size: 12px; color: var(--text-muted);">1,341,499 Khách Hàng</span>
+        </div>
+        
+        <div class="bar-row">
+          <div class="bar-header">
+            <span class="bar-title">Khách hàng Đã Mua (Buyers) &bull; Dành cho Phân cụm RFM + Tương tác 30d</span>
+            <span class="bar-values"><strong>92,652</strong> &bull; 6.91%</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: 6.91%; background: var(--cluster-vip); min-width: 48px;">6.9%</div>
+          </div>
+        </div>
+
+        <div class="bar-row">
+          <div class="bar-header">
+            <span class="bar-title">Khách hàng Chưa Mua (Non-Buyers) &bull; Dành cho Phân tầng Tương tác (4 Tiers)</span>
+            <span class="bar-values"><strong>92,652 + 1,156,195 = 1,248,847</strong> &bull; 93.09%</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: 93.09%; background: #94a3b8;">93.1%</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 12px; padding: 12px; background: var(--bg-subtle); border-radius: var(--radius-sm); font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+          <strong>Nguyên tắc Kiến trúc:</strong> Hai nhóm này được lưu trữ thành hai bảng độc lập (<code>buyer_features.parquet</code> và <code>non_buyer_features.parquet</code>). Nhóm Non-Buyers tuyệt đối không bị gán Recency giả (như 0 hay 999), bảo vệ toàn vẹn không gian hình học Euclidean của mô hình phân cụm K-Means.
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- TAB 2: PHÂN KHÚC (CUSTOMER SEGMENTS) -->
+    <!-- =================================================================== -->
+    <div id="pane-segmentation" class="tab-pane">
+      <div class="view-header">
+        <h2 class="view-title">Phân khúc Khách hàng &amp; Chân dung Hành vi</h2>
+        <p class="view-desc">
+          Bốn phân khúc người mua (Buyers) được nhận diện bằng thuật toán Standard K-Means (K=4) trên không gian 7 chiều F1 (RFM + Tương tác 30 ngày), kết hợp 4 tầng tương tác cho người chưa mua (Non-Buyers).
+        </p>
+      </div>
+
+      <!-- 4 Segment Cards with Visual Bars & Explicit Median Labels -->
+      <div class="grid-4">
+        <!-- Cluster 1: VIP -->
+        <div class="segment-card">
+          <div class="segment-card-top-bar" style="background: var(--cluster-vip);"></div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+            <div>
+              <span class="badge-seg badge-seg-1">Cluster 1 &bull; VIP</span>
+              <h3 style="font-size: 15px; font-weight: 700; color: var(--text-main); margin-top: 4px;">VIP Cốt Lõi</h3>
+            </div>
+            <div style="text-align: right;">
+              <div class="num" style="font-size: 18px; font-weight: 700; color: var(--cluster-vip);">8,755</div>
+              <div style="font-size: 11px; color: var(--text-muted);">9.45% Buyers</div>
+            </div>
+          </div>
+
+          <div style="font-size: 11px; color: #059669; background: #ecfdf5; padding: 3px 6px; border-radius: 4px; margin-bottom: 8px; font-weight: 600;">
+            Holdout T2/2020: 35.02% mua lại
+          </div>
+
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px;">
+            Khách hàng giá trị cao nhất sàn, mua lặp lại thường xuyên và tương tác liên tục trong tháng qua.
+          </p>
+
+          <div class="segment-metrics-grid">
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Recency (Median)</span>
+              <span class="segment-metric-value" style="color: var(--cluster-vip);">12.7 ngày</span>
+            </div>
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Monetary (Median)</span>
+              <span class="segment-metric-value" style="color: #059669;">$117.69</span>
+            </div>
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Frequency (Median)</span>
+              <span class="segment-metric-value">3.0 phiên</span>
+            </div>
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Phiên 30d (Median)</span>
+              <span class="segment-metric-value">9.0 phiên</span>
+            </div>
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Lượt xem 30d (Median)</span>
+              <span class="segment-metric-value">29.0 lượt</span>
+            </div>
+          </div>
+          <div style="font-size: 11px; color: var(--text-light); text-align: right; margin-top: 4px;">
+            Mean: R=18.0d &bull; M=$163.51 &bull; F=3.22 &bull; Sess=18.4 &bull; Views=52.7
+          </div>
+        </div>
+
+        <!-- Cluster 3: Active -->
+        <div class="segment-card">
+          <div class="segment-card-top-bar" style="background: var(--cluster-active);"></div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+            <div>
+              <span class="badge-seg badge-seg-3">Cluster 3 &bull; Active</span>
+              <h3 style="font-size: 15px; font-weight: 700; color: var(--text-main); margin-top: 4px;">Triển Vọng Mua Lại</h3>
+            </div>
+            <div style="text-align: right;">
+              <div class="num" style="font-size: 18px; font-weight: 700; color: var(--cluster-active);">23,144</div>
+              <div style="font-size: 11px; color: var(--text-muted);">24.98% Buyers</div>
+            </div>
+          </div>
+
+          <div style="font-size: 11px; color: #0d9488; background: #f0fdfa; padding: 3px 6px; border-radius: 4px; margin-bottom: 8px; font-weight: 600;">
+            Holdout T2/2020: 10.13% mua lại
+          </div>
+
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px;">
+            Khách mới mua gần đây, đang tích cực duyệt xem sản phẩm và thêm giỏ hàng trong 30 ngày qua.
+          </p>
+
+          <div class="segment-metrics-grid">
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Recency (Median)</span>
+              <span class="segment-metric-value" style="color: var(--cluster-active);">16.3 ngày</span>
+            </div>
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Monetary (Median)</span>
+              <span class="segment-metric-value">$28.13</span>
+            </div>
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Frequency (Median)</span>
+              <span class="segment-metric-value">1.0 phiên</span>
+            </div>
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Phiên 30d (Median)</span>
+              <span class="segment-metric-value">3.0 phiên</span>
+            </div>
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Lượt xem 30d (Median)</span>
+              <span class="segment-metric-value">8.0 lượt</span>
+            </div>
+          </div>
+          <div style="font-size: 11px; color: var(--text-light); text-align: right; margin-top: 4px;">
+            Mean: R=22.1d &bull; M=$38.51 &bull; F=1.10 &bull; Sess=4.35 &bull; Views=14.65
+          </div>
+        </div>
+
+        <!-- Cluster 2: At-Risk -->
+        <div class="segment-card">
+          <div class="segment-card-top-bar" style="background: var(--cluster-risk);"></div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+            <div>
+              <span class="badge-seg badge-seg-2">Cluster 2 &bull; At-Risk</span>
+              <h3 style="font-size: 15px; font-weight: 700; color: var(--text-main); margin-top: 4px;">Chi Tiêu Khá Hạ Nhiệt</h3>
+            </div>
+            <div style="text-align: right;">
+              <div class="num" style="font-size: 18px; font-weight: 700; color: var(--cluster-risk);">18,608</div>
+              <div style="font-size: 11px; color: var(--text-muted);">20.08% Buyers</div>
+            </div>
+          </div>
+
+          <div style="font-size: 11px; color: #e11d48; background: #fff1f2; padding: 3px 6px; border-radius: 4px; margin-bottom: 8px; font-weight: 600;">
+            Holdout T2/2020: 7.32% mua lại
+          </div>
+
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px;">
+            Từng chi tiêu khá nhưng đã ngừng hẳn truy cập trong 30 ngày qua. Nguy cơ rời bỏ cao.
+          </p>
+
+          <div class="segment-metrics-grid">
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Recency (Median)</span>
+              <span class="segment-metric-value" style="color: var(--cluster-risk);">54.3 ngày</span>
+            </div>
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Monetary (Median)</span>
+              <span class="segment-metric-value">$67.29</span>
+            </div>
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Frequency (Median)</span>
+              <span class="segment-metric-value">1.0 phiên</span>
+            </div>
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Phiên 30d (Median)</span>
+              <span class="segment-metric-value">0.0 phiên</span>
+            </div>
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Lượt xem 30d (Median)</span>
+              <span class="segment-metric-value">0.0 lượt</span>
+            </div>
+          </div>
+          <div style="font-size: 11px; color: var(--text-light); text-align: right; margin-top: 4px;">
+            Mean: R=58.0d &bull; M=$92.43 &bull; F=1.62 &bull; Sess=0.32 &bull; Views=0.53
+          </div>
+        </div>
+
+        <!-- Cluster 0: Dormant -->
+        <div class="segment-card">
+          <div class="segment-card-top-bar" style="background: var(--cluster-dormant);"></div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+            <div>
+              <span class="badge-seg badge-seg-0">Cluster 0 &bull; Dormant</span>
+              <h3 style="font-size: 15px; font-weight: 700; color: var(--text-main); margin-top: 4px;">Mua 1 Lần Ngủ Đông</h3>
+            </div>
+            <div style="text-align: right;">
+              <div class="num" style="font-size: 18px; font-weight: 700; color: var(--cluster-dormant);">42,145</div>
+              <div style="font-size: 11px; color: var(--text-muted);">45.49% Buyers</div>
+            </div>
+          </div>
+
+          <div style="font-size: 11px; color: #475569; background: #f1f5f9; padding: 3px 6px; border-radius: 4px; margin-bottom: 8px; font-weight: 600;">
+            Holdout T2/2020: 2.66% mua lại
+          </div>
+
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px;">
+            Mua đơn giá trị thấp từ lâu, hoàn toàn không quay lại website trong tháng gần nhất.
+          </p>
+
+          <div class="segment-metrics-grid">
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Recency (Median)</span>
+              <span class="segment-metric-value">82.3 ngày</span>
+            </div>
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Monetary (Median)</span>
+              <span class="segment-metric-value">$20.24</span>
+            </div>
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Frequency (Median)</span>
+              <span class="segment-metric-value">1.0 phiên</span>
+            </div>
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Phiên 30d (Median)</span>
+              <span class="segment-metric-value">0.0 phiên</span>
+            </div>
+            <div class="segment-metric-item">
+              <span class="segment-metric-label">Lượt xem 30d (Median)</span>
+              <span class="segment-metric-value">0.0 lượt</span>
+            </div>
+          </div>
+          <div style="font-size: 11px; color: var(--text-light); text-align: right; margin-top: 4px;">
+            Mean: R=82.1d &bull; M=$26.07 &bull; F=1.02 &bull; Sess=0.13 &bull; Views=0.22
+          </div>
+        </div>
+      </div>
+
+      <!-- Segment Feature Verification Table (Explicit Mean vs Median Audit) -->
+      <div class="card" style="margin-bottom: 20px;">
+        <div class="card-title">
+          <span>Bảng Đối Soát Chỉ Số Phân Khúc Người Mua (Buyers Feature Verification: Mean &bull; Median)</span>
+          <span style="font-size: 11px; color: var(--text-muted);">92,652 Khách hàng Đã Mua (K=4 K-Means trên không gian F1)</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Cụm &bull; Tên chiến lược</th>
+                <th class="text-right">Quy mô</th>
+                <th class="text-right">Recency (ngày)<br><small style="font-weight: normal; color: var(--text-muted);">Med / Mean</small></th>
+                <th class="text-right">Monetary ($)<br><small style="font-weight: normal; color: var(--text-muted);">Med / Mean</small></th>
+                <th class="text-right">Frequency (phiên)<br><small style="font-weight: normal; color: var(--text-muted);">Med / Mean</small></th>
+                <th class="text-right" style="background: rgba(37,99,235,0.05);">Phiên 30d (Sess)<br><small style="font-weight: normal; color: var(--primary);">Med / Mean</small></th>
+                <th class="text-right" style="background: rgba(13,148,136,0.05);">Lượt xem 30d (Views)<br><small style="font-weight: normal; color: var(--cluster-active);">Med / Mean</small></th>
+                <th class="text-right">Giỏ 30d (Cart)<br><small style="font-weight: normal; color: var(--text-muted);">Med / Mean</small></th>
+                <th class="text-right">Holdout T2/2020</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="badge-seg badge-seg-1">Cluster 1 &bull; Core VIP Champions</span></td>
+                <td class="text-right num"><strong>8,755</strong> (9.45%)</td>
+                <td class="text-right num">12.7 / 18.0</td>
+                <td class="text-right num" style="color: #059669; font-weight: 600;">$117.69 / $163.51</td>
+                <td class="text-right num">3.0 / 3.22</td>
+                <td class="text-right num" style="background: rgba(37,99,235,0.05); font-weight: 700; color: var(--primary);">9.0 / 18.43</td>
+                <td class="text-right num" style="background: rgba(13,148,136,0.05); font-weight: 700; color: var(--cluster-active);">29.0 / 52.66</td>
+                <td class="text-right num">5.0 / 6.41</td>
+                <td class="text-right num" style="color: #059669; font-weight: 700;">35.02%</td>
+              </tr>
+              <tr>
+                <td><span class="badge-seg badge-seg-3">Cluster 3 &bull; Active Repeat Prospects</span></td>
+                <td class="text-right num"><strong>23,144</strong> (24.98%)</td>
+                <td class="text-right num">16.3 / 22.1</td>
+                <td class="text-right num">$28.13 / $38.51</td>
+                <td class="text-right num">1.0 / 1.10</td>
+                <td class="text-right num" style="background: rgba(37,99,235,0.05); font-weight: 700; color: var(--primary);">3.0 / 4.35</td>
+                <td class="text-right num" style="background: rgba(13,148,136,0.05); font-weight: 700; color: var(--cluster-active);">8.0 / 14.65</td>
+                <td class="text-right num">1.0 / 1.93</td>
+                <td class="text-right num" style="color: #0d9488; font-weight: 700;">10.13%</td>
+              </tr>
+              <tr>
+                <td><span class="badge-seg badge-seg-2">Cluster 2 &bull; At-Risk Spenders</span></td>
+                <td class="text-right num"><strong>18,608</strong> (20.08%)</td>
+                <td class="text-right num">54.3 / 58.0</td>
+                <td class="text-right num">$67.29 / $92.43</td>
+                <td class="text-right num">1.0 / 1.62</td>
+                <td class="text-right num" style="background: rgba(37,99,235,0.05); font-weight: 600; color: var(--text-muted);">0.0 / 0.32</td>
+                <td class="text-right num" style="background: rgba(13,148,136,0.05); font-weight: 600; color: var(--text-muted);">0.0 / 0.53</td>
+                <td class="text-right num">0.0 / 0.11</td>
+                <td class="text-right num" style="color: #e11d48; font-weight: 700;">7.32%</td>
+              </tr>
+              <tr>
+                <td><span class="badge-seg badge-seg-0">Cluster 0 &bull; Dormant Single Buyers</span></td>
+                <td class="text-right num"><strong>42,145</strong> (45.49%)</td>
+                <td class="text-right num">82.3 / 82.1</td>
+                <td class="text-right num">$20.24 / $26.07</td>
+                <td class="text-right num">1.0 / 1.02</td>
+                <td class="text-right num" style="background: rgba(37,99,235,0.05); font-weight: 600; color: var(--text-muted);">0.0 / 0.13</td>
+                <td class="text-right num" style="background: rgba(13,148,136,0.05); font-weight: 600; color: var(--text-muted);">0.0 / 0.22</td>
+                <td class="text-right num">0.0 / 0.03</td>
+                <td class="text-right num" style="color: #64748b; font-weight: 700;">2.66%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Side-by-Side Visual Comparison Chart -->
+      <div class="card" style="margin-bottom: 20px;">
+        <div class="card-title">
+          <span>So sánh Trực quan Đặc trưng Cốt lõi giữa 4 Cụm (Median Values Visual Comparison)</span>
+          <span style="font-size: 11px; color: var(--text-muted);">Chuẩn hóa theo giá trị cực đại để so sánh trực diện</span>
+        </div>
+
+        <div class="comp-charts-grid">
+          <!-- Monetary Comparison -->
+          <div>
+            <div class="comp-bar-header">
+              <span><strong>Monetary (Tổng chi tiêu tích lũy)</strong></span>
+              <span>C1: $117.69 &bull; C2: $67.29 &bull; C3: $28.13 &bull; C0: $20.24</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 11px;">
+                <span style="width: 70px;">C1 &bull; VIP</span>
+                <div style="flex: 1; height: 12px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                  <div style="width: 100%; height: 100%; background: var(--cluster-vip);"></div>
+                </div>
+                <span class="num" style="width: 60px; text-align: right;">$117.69</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 11px;">
+                <span style="width: 70px;">C2 &bull; Risk</span>
+                <div style="flex: 1; height: 12px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                  <div style="width: 57.2%; height: 100%; background: var(--cluster-risk);"></div>
+                </div>
+                <span class="num" style="width: 60px; text-align: right;">$67.29</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 11px;">
+                <span style="width: 70px;">C3 &bull; Active</span>
+                <div style="flex: 1; height: 12px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                  <div style="width: 23.9%; height: 100%; background: var(--cluster-active);"></div>
+                </div>
+                <span class="num" style="width: 60px; text-align: right;">$28.13</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 11px;">
+                <span style="width: 70px;">C0 &bull; Dormant</span>
+                <div style="flex: 1; height: 12px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                  <div style="width: 17.2%; height: 100%; background: var(--cluster-dormant);"></div>
+                </div>
+                <span class="num" style="width: 60px; text-align: right;">$20.24</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recency & Recent Activity Comparison -->
+          <div>
+            <div class="comp-bar-header">
+              <span><strong>Hoạt động 30 ngày gần đây (Recent Sessions)</strong></span>
+              <span>C1: 9.0 phiên &bull; C3: 3.0 phiên &bull; C2: 0 &bull; C0: 0</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 11px;">
+                <span style="width: 70px;">C1 &bull; VIP</span>
+                <div style="flex: 1; height: 12px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                  <div style="width: 100%; height: 100%; background: var(--cluster-vip);"></div>
+                </div>
+                <span class="num" style="width: 60px; text-align: right;">9.0 phiên</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 11px;">
+                <span style="width: 70px;">C3 &bull; Active</span>
+                <div style="flex: 1; height: 12px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                  <div style="width: 33.3%; height: 100%; background: var(--cluster-active);"></div>
+                </div>
+                <span class="num" style="width: 60px; text-align: right;">3.0 phiên</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 11px;">
+                <span style="width: 70px;">C2 &bull; Risk</span>
+                <div style="flex: 1; height: 12px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                  <div style="width: 0%; height: 100%; background: var(--cluster-risk);"></div>
+                </div>
+                <span class="num" style="width: 60px; text-align: right;">0.0 phiên</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 11px;">
+                <span style="width: 70px;">C0 &bull; Dormant</span>
+                <div style="flex: 1; height: 12px; background: #f1f5f9; border-radius: 4px; overflow: hidden;">
+                  <div style="width: 0%; height: 100%; background: var(--cluster-dormant);"></div>
+                </div>
+                <span class="num" style="width: 60px; text-align: right;">0.0 phiên</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Non-Buyer Engagement Tiers Table -->
+      <div class="card" style="margin-bottom: 20px;">
+        <div class="card-title">
+          <span>4 Tầng Tương Tác Khách Hàng Chưa Mua (Non-Buyer Engagement Tiers)</span>
+          <span style="font-size: 11px; color: var(--text-muted);">1,248,847 Khách Hàng</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Tầng tương tác</th>
+                <th>Tên định danh</th>
+                <th class="text-right">Quy mô khách</th>
+                <th class="text-right">Tỷ trọng Non-Buyers</th>
+                <th>Chiến thuật ứng viên</th>
+                <th>Mục tiêu tiếp thị</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="kpi-tag" style="background: #fffbeb; color: #b45309; font-weight: 700;">HIGH_INTENT</span></td>
+                <td><strong>Ý định mua cao (Có giỏ hàng 30d)</strong></td>
+                <td class="text-right num"><strong>34,061</strong></td>
+                <td class="text-right num">2.73%</td>
+                <td><code>TAC_CART_RECOVERY</code></td>
+                <td>Hỗ trợ hoàn tất đơn đầu tiên</td>
+              </tr>
+              <tr>
+                <td><span class="kpi-tag" style="background: #eff6ff; color: #1d4ed8; font-weight: 700;">EXPLORING</span></td>
+                <td><strong>Khám phá tích cực (Xem nhiều)</strong></td>
+                <td class="text-right num"><strong>81,994</strong></td>
+                <td class="text-right num">6.57%</td>
+                <td><code>TAC_PRODUCT_EDU</code></td>
+                <td>Giáo dục sản phẩm &amp; Gợi ý bộ mẫu</td>
+              </tr>
+              <tr>
+                <td><span class="kpi-tag" style="background: #f5f3ff; color: #6d28d9; font-weight: 700;">LOW_ENGAGEMENT</span></td>
+                <td><strong>Tương tác mức thấp (Thăm 1-2 lần)</strong></td>
+                <td class="text-right num"><strong>246,717</strong></td>
+                <td class="text-right num">19.76%</td>
+                <td><code>TAC_LOW_COST_NURTURE</code></td>
+                <td>Bản tin xu hướng chi phí thấp</td>
+              </tr>
+              <tr>
+                <td><span class="kpi-tag" style="background: #f1f5f9; color: #475569; font-weight: 700;">INACTIVE</span></td>
+                <td><strong>Không hoạt động (Vãng lai thoát ngay)</strong></td>
+                <td class="text-right num"><strong>886,075</strong></td>
+                <td class="text-right num">70.95%</td>
+                <td><code>TAC_NO_ACTION</code></td>
+                <td>Bảo vệ tần suất tiếp xúc (Guardrail G5)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- TAB 3: HÀNH VI & PHỄU (BEHAVIORAL ANALYTICS & FUNNEL) -->
+    <!-- =================================================================== -->
+    <div id="pane-funnel" class="tab-pane">
+      <div class="view-header">
+        <h2 class="view-title">Phân tích Hành vi &amp; Phễu Chuyển đổi Cấp Phiên</h2>
+        <p class="view-desc">
+          Mô hình hóa hành vi người dùng theo cấp phiên (Session-level) nhằm loại trừ sự sai lệch khi khách hàng xem nhiều sản phẩm trong cùng một đơn hàng.
+        </p>
+      </div>
+
+      <div class="grid-2">
+        <!-- 3-Step Session Funnel -->
+        <div class="card">
+          <div class="card-title">
+            <span>Phễu Chuyển Đổi Cấp Phiên (Session-Level Funnel)</span>
+            <span class="kpi-tag">2,873,439 Phiên Hợp Lệ</span>
+          </div>
+
+          <div class="bar-row">
+            <div class="bar-header">
+              <span class="bar-title">1. Phiên chỉ xem sản phẩm (View Sessions)</span>
+              <span class="bar-values"><strong>2,873,439</strong> &bull; 100.0%</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width: 100%; background: #64748b;">100.0%</div>
+            </div>
+          </div>
+
+          <div class="bar-row">
+            <div class="bar-header">
+              <span class="bar-title">2. Phiên có thêm giỏ hàng (Cart Sessions)</span>
+              <span class="bar-values"><strong>983,165</strong> &bull; 34.21%</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width: 34.21%; background: var(--primary);">34.2%</div>
+            </div>
+          </div>
+
+          <div class="bar-row">
+            <div class="bar-header">
+              <span class="bar-title">3. Phiên phát sinh mua hàng (Purchase Sessions)</span>
+              <span class="bar-values"><strong>126,503</strong> &bull; 4.40% toàn phễu</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" style="width: 4.40%; background: #059669; min-width: 42px;">4.4%</div>
+            </div>
+          </div>
+
+          <div style="margin-top: 16px; padding: 12px; background: #fffbeb; border: 1px solid #fef3c7; border-radius: var(--radius-sm); font-size: 12px; color: #92400e; line-height: 1.6;">
+            <strong>Chỉ số Rơi rụng Giỏ hàng:</strong> Có <strong>856,662 phiên</strong> có thêm giỏ hàng nhưng không phát sinh mua hàng trong cùng phiên, tương ứng với tỷ lệ <strong>Cart Session No-Purchase Rate = 87.13%</strong>.
+            <div style="font-size: 11px; margin-top: 4px; color: #78350f;">
+              <em>Lưu ý ngữ nghĩa:</em> Đây là phép đo cấp phiên (Session-level). Không đồng nhất với việc người dùng từ bỏ vĩnh viễn, vì họ có thể quay lại mua trong phiên khác hoặc trên thiết bị khác.
+            </div>
+          </div>
+        </div>
+
+        <!-- Event Distribution Table -->
+        <div class="card">
+          <div class="card-title">
+            <span>Cơ Cấu 19.58M Sự Kiện Parquet Sạch (Clean Events Breakdown)</span>
+            <span class="kpi-tag" style="background: #ecfdf5; color: #065f46;">Đã Làm Sạch</span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Loại sự kiện</th>
+                  <th class="text-right">Khối lượng</th>
+                  <th class="text-right">Tỷ trọng</th>
+                  <th>Ý nghĩa phân tích</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>view</code></td>
+                  <td class="text-right num">13,901,847</td>
+                  <td class="text-right num">70.99%</td>
+                  <td>Duyệt xem trang chi tiết sản phẩm</td>
+                </tr>
+                <tr>
+                  <td><code>cart</code></td>
+                  <td class="text-right num">4,881,154</td>
+                  <td class="text-right num">24.92%</td>
+                  <td>Tín hiệu có ý định mua sắm cao</td>
+                </tr>
+                <tr>
+                  <td><code>purchase</code></td>
+                  <td class="text-right num">800,741</td>
+                  <td class="text-right num">4.09%</td>
+                  <td>Giao dịch thanh toán thành công</td>
+                </tr>
+                <tr style="background: var(--bg-subtle); font-weight: 600;">
+                  <td>Tổng cộng</td>
+                  <td class="text-right num">19,583,742</td>
+                  <td class="text-right num">100.0%</td>
+                  <td>Bảo toàn 100% sự kiện hợp lệ</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- TAB 4: CHIẾN THUẬT MARKETING (MARKETING DECISION ENGINE) -->
+    <!-- =================================================================== -->
+    <div id="pane-decisions" class="tab-pane">
+      <div class="view-header">
+        <h2 class="view-title">Bộ Máy Chỉ Dẫn Quyết Định Tiếp Thị (Decision Engine)</h2>
+        <p class="view-desc">
+          Hệ chuyên gia luật dựa trên bằng chứng (Evidence-Based Rule Engine) chuyển hóa các tín hiệu hành vi cá nhân hóa thành 8 chiến thuật tiếp thị ứng viên đi kèm lý do giải thích và KPI đo lường.
+        </p>
+      </div>
+
+      <!-- Tactic Distribution Table (CORRECT SOURCE-OF-TRUTH NUMBERS) -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">
+            <span>Phân Bổ 8 Chiến Thuật Ứng Viên (1,341,499 Khách Hàng)</span>
+            <span class="badge-pending">100% PENDING_CONSENT</span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Chiến thuật ứng viên</th>
+                  <th class="text-right">Quy mô</th>
+                  <th class="text-right">Tỷ trọng</th>
+                  <th>Phân phối nhóm đối tượng</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>TAC_NO_ACTION</strong></td>
+                  <td class="text-right num"><strong>892,508</strong></td>
+                  <td class="text-right num">66.53%</td>
+                  <td>886k Non-Buyers (G5) + 6.4k Dormant (G3)</td>
+                </tr>
+                <tr>
+                  <td><strong>TAC_LOW_COST_NURTURE</strong></td>
+                  <td class="text-right num"><strong>282,108</strong></td>
+                  <td class="text-right num">21.03%</td>
+                  <td>246.7k Non-Buyers + 35.4k Dormant Buyers</td>
+                </tr>
+                <tr>
+                  <td><strong>TAC_PRODUCT_EDU</strong></td>
+                  <td class="text-right num"><strong>85,166</strong></td>
+                  <td class="text-right num">6.35%</td>
+                  <td>82.0k Exploring Non-Buyers + 3.2k Buyers</td>
+                </tr>
+                <tr>
+                  <td><strong>Candidate Cart Follow-Up</strong><br><small style="font-weight: normal; color: var(--text-muted);">TAC_CART_RECOVERY</small></td>
+                  <td class="text-right num"><strong>60,351</strong></td>
+                  <td class="text-right num">4.50%</td>
+                  <td>34.1k High-Intent Non-Buyers + 26.3k Buyers<br><small style="color: var(--text-muted); font-size: 11px;">Có tín hiệu thêm giỏ trong cửa sổ quan sát gần đây (chưa xác minh trạng thái giỏ còn mở hay đã đóng/hết hạn)</small></td>
+                </tr>
+                <tr>
+                  <td><strong>TAC_WINBACK_SURVEY</strong></td>
+                  <td class="text-right num"><strong>13,196</strong></td>
+                  <td class="text-right num">0.98%</td>
+                  <td>13.17k At-Risk (C2) + 27 VIPs (C1)</td>
+                </tr>
+                <tr>
+                  <td><strong>TAC_LOYALTY_VIP</strong></td>
+                  <td class="text-right num"><strong>7,418</strong></td>
+                  <td class="text-right num">0.55%</td>
+                  <td>100% Khách VIP đang hoạt động tích cực (C1)</td>
+                </tr>
+                <tr>
+                  <td><strong>TAC_CROSS_SELL</strong></td>
+                  <td class="text-right num"><strong>674</strong></td>
+                  <td class="text-right num">0.05%</td>
+                  <td>100% Khách mua lặp lại duyệt web (C3)</td>
+                </tr>
+                <tr>
+                  <td><strong>Chăm sóc sau sự kiện mua</strong><br><small style="font-weight: normal; color: var(--text-muted);">TAC_POST_PURCHASE_CARE</small></td>
+                  <td class="text-right num"><strong>78</strong></td>
+                  <td class="text-right num">0.01%</td>
+                  <td>23 VIPs (C1) + 55 Active Prospects (C3)<br><small style="color: var(--text-muted); font-size: 11px;">Chăm sóc sau sự kiện mua hàng được ghi nhận gần đây (R &le; 3 ngày; không có bằng chứng giao hàng thành công do REES46 không có trạng thái giao vận)</small></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Hypothetical Cost Avoidance Card -->
+        <div class="card" style="border-left: 4px solid var(--accent-amber);">
+          <div class="card-title">
+            <span>Kịch Bản Giả Định Tiết Kiệm Chi Phí (Hypothetical Cost Avoidance)</span>
+            <span class="kpi-tag" style="background: var(--accent-amber-bg); color: var(--accent-amber);">Simulation</span>
+          </div>
+
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5;">
+            Dataset REES46 không ghi nhận chi phí tiếp thị thực tế. Kịch bản dưới đây đánh giá hiệu quả kinh tế lý thuyết của việc áp dụng Guardrails G3 và G5 để loại trừ các tài khoản không có tín hiệu phản hồi:
+          </p>
+
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 14px;">
+            <div style="background: var(--bg-subtle); padding: 12px; border-radius: var(--radius-sm);">
+              <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Tài khoản được bảo vệ:</div>
+              <div class="num" style="font-size: 20px; font-weight: 700; color: var(--text-main); margin-top: 4px;">892,508</div>
+              <div style="font-size: 11px; color: var(--text-muted);">66.53% dân số (Guardrails G3 &amp; G5)</div>
+            </div>
+
+            <div style="background: var(--bg-subtle); padding: 12px; border-radius: var(--radius-sm);">
+              <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Tần suất gửi giả định:</div>
+              <div class="num" style="font-size: 20px; font-weight: 700; color: var(--text-main); margin-top: 4px;">1 tin / tuần</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Giả định gửi tin đại trà cho khách ngủ</div>
+            </div>
+          </div>
+
+          <div style="background: #fffbeb; border: 1px solid #fde68a; padding: 12px; border-radius: var(--radius-sm); font-size: 12px; color: #92400e;">
+            <div style="font-weight: 700; margin-bottom: 4px;">Ước tính Chi Phí Lãng Phí Tránh Được Mỗi Tuần:</div>
+            <div>&bull; Với chi phí Email tự động ($0.005/tin): <strong>$4,462.54 / tuần</strong></div>
+            <div>&bull; Với chi phí Tin nhắn SMS/OTT ($0.02/tin): <strong>$17,850.16 / tuần</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Archetype Explorer -->
+      <div style="margin-top: 10px;">
+        <div class="card-title">
+          <span>Trình Khám Phá Chân Dung Khách Hàng Vi Mô (Interactive Archetype Explorer)</span>
+          <span style="font-size: 12px; color: var(--text-muted);">Khám phá 8 hồ sơ mẫu đại diện (ARC-01 &rarr; ARC-08)</span>
+        </div>
+
+        <div class="arch-container">
+          <div class="arch-sidebar" id="arch-list">
+            <!-- Dynamically populated via JS -->
+          </div>
+          <div class="arch-content" id="arch-detail">
+            <!-- Dynamically populated via JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- TAB 5: MÔ HÌNH & HỆ THỐNG (MODEL & SYSTEM INSIGHTS) -->
+    <!-- =================================================================== -->
+    <div id="pane-insights" class="tab-pane">
+      <div class="view-header">
+        <h2 class="view-title">Kiểm Chứng Hậu Kiểm Ngoài Mẫu &amp; Nguồn Gốc Dữ Liệu</h2>
+        <p class="view-desc">
+          Kết quả hậu kiểm chuỗi thời gian ngoài mẫu trên tháng 02/2020 (3.92M sự kiện), trực quan hóa khoảng tin cậy Wilson Score 95% và bảng đối soát hiệu năng kỹ thuật.
+        </p>
+      </div>
+
+      <!-- Visual Dot Plot with Error Bars for Future Purchase Rate & Wilson 95% CI -->
+      <div class="card" style="margin-bottom: 20px;">
+        <div class="card-title">
+          <span>Tỷ Lệ Mua Hàng Tương Lai (Tháng 02/2020) &bull; Khoảng Tin Cậy Wilson Score 95% (CI Error Whiskers)</span>
+          <span class="badge-research">3.92M Events Đóng Băng</span>
+        </div>
+
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">
+          Mô hình hình thành từ dữ liệu trước 01/02/2020. Dữ liệu tháng 02/2020 được niêm phong nghiêm ngặt, chỉ dùng một lần duy nhất để kiểm tra xem các phân khúc có phân hóa hành vi trong tương lai hay không.
+        </p>
+
+        <!-- CI Rows -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <!-- C1 VIP -->
+          <div class="ci-row">
+            <div class="ci-label" style="color: var(--cluster-vip);">C1 &bull; VIP Champions</div>
+            <div class="ci-plot-area">
+              <div class="ci-band" style="left: 34.02%; width: 2.01%; background: var(--cluster-vip);"></div>
+              <div class="ci-point" style="left: 35.02%; background: var(--cluster-vip);"></div>
+            </div>
+            <div class="ci-val-text"><strong class="num" style="color: var(--cluster-vip);">35.02%</strong> (CI: [34.0%, 36.0%])</div>
+          </div>
+
+          <!-- C3 Active -->
+          <div class="ci-row">
+            <div class="ci-label" style="color: var(--cluster-active);">C3 &bull; Active Prospects</div>
+            <div class="ci-plot-area">
+              <div class="ci-band" style="left: 9.75%; width: 0.78%; background: var(--cluster-active);"></div>
+              <div class="ci-point" style="left: 10.13%; background: var(--cluster-active);"></div>
+            </div>
+            <div class="ci-val-text"><strong class="num" style="color: var(--cluster-active);">10.13%</strong> (CI: [9.8%, 10.5%])</div>
+          </div>
+
+          <!-- C2 At-Risk -->
+          <div class="ci-row">
+            <div class="ci-label" style="color: var(--cluster-risk);">C2 &bull; At-Risk Spenders</div>
+            <div class="ci-plot-area">
+              <div class="ci-band" style="left: 6.96%; width: 0.75%; background: var(--cluster-risk);"></div>
+              <div class="ci-point" style="left: 7.32%; background: var(--cluster-risk);"></div>
+            </div>
+            <div class="ci-val-text"><strong class="num" style="color: var(--cluster-risk);">7.32%</strong> (CI: [7.0%, 7.7%])</div>
+          </div>
+
+          <!-- C0 Dormant -->
+          <div class="ci-row">
+            <div class="ci-label" style="color: var(--cluster-dormant);">C0 &bull; Dormant Buyers</div>
+            <div class="ci-plot-area">
+              <div class="ci-band" style="left: 2.51%; width: 0.31%; background: var(--cluster-dormant);"></div>
+              <div class="ci-point" style="left: 2.66%; background: var(--cluster-dormant);"></div>
+            </div>
+            <div class="ci-val-text"><strong class="num">2.66%</strong> (CI: [2.5%, 2.8%])</div>
+          </div>
+
+          <!-- Non-Buyers -->
+          <div class="ci-row">
+            <div class="ci-label" style="color: #94a3b8;">Non-Buyers Baseline</div>
+            <div class="ci-plot-area">
+              <div class="ci-band" style="left: 0.41%; width: 0.02%; background: #94a3b8;"></div>
+              <div class="ci-point" style="left: 0.42%; background: #94a3b8;"></div>
+            </div>
+            <div class="ci-val-text"><strong class="num">0.42%</strong> (CI: [0.41%, 0.43%])</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 14px; font-size: 12px; color: var(--text-muted); background: var(--bg-subtle); padding: 10px 12px; border-radius: var(--radius-sm);">
+          <strong>Kết luận Thống kê:</strong> Các khoảng tin cậy Wilson Score 95% <strong>hoàn toàn không chồng lấn</strong> (Zero overlap, p &lt; 10<sup>-100</sup>), chứng minh sự phân hóa hành vi tương lai giữa 4 phân cụm là thực tế khách quan trên tập dữ liệu lịch sử REES46 tháng 02/2020.
+        </div>
+      </div>
+
+      <!-- Spend Ratio Table & Technical Benchmarks -->
+      <div class="grid-2">
+        <!-- Future Spend Ratio Table -->
+        <div class="card">
+          <div class="card-title">
+            <span>Doanh Thu Bình Quân &bull; Tỷ Số Chi Tiêu Quan Sát (Feb 2020)</span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Phân khúc</th>
+                  <th class="text-right">Chi tiêu TB / Khách</th>
+                  <th class="text-right">Tỷ số so với Non-Buyers</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong style="color: var(--cluster-vip);">C1 &bull; VIP Champions</strong></td>
+                  <td class="text-right num"><strong>$25.85</strong></td>
+                  <td class="text-right num" style="color: var(--cluster-vip); font-weight: 700;">129.3x</td>
+                </tr>
+                <tr>
+                  <td><strong style="color: var(--cluster-active);">C3 &bull; Active Prospects</strong></td>
+                  <td class="text-right num"><strong>$4.91</strong></td>
+                  <td class="text-right num" style="color: var(--cluster-active); font-weight: 700;">24.6x</td>
+                </tr>
+                <tr>
+                  <td><strong style="color: var(--cluster-risk);">C2 &bull; At-Risk Spenders</strong></td>
+                  <td class="text-right num"><strong>$4.28</strong></td>
+                  <td class="text-right num" style="color: var(--cluster-risk); font-weight: 700;">21.4x</td>
+                </tr>
+                <tr>
+                  <td><strong>C0 &bull; Dormant Buyers</strong></td>
+                  <td class="text-right num"><strong>$0.91</strong></td>
+                  <td class="text-right num">4.6x</td>
+                </tr>
+                <tr style="background: var(--bg-subtle);">
+                  <td><em>Non-Buyers (Mốc so sánh)</em></td>
+                  <td class="text-right num"><em>$0.20</em></td>
+                  <td class="text-right num"><em>1.0x (Baseline)</em></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">
+            <em>Lưu ý khoa học:</em> Tỷ số chi tiêu so với Non-Buyers phản ánh giá trị tự nhiên quan sát được; tuyệt đối không gọi là Marketing Causal Lift khi chưa có thử nghiệm đối chứng A/B testing.
+          </div>
+        </div>
+
+        <!-- Technical Engine Benchmarks -->
+        <div class="card">
+          <div class="card-title">
+            <span>Hiệu Quả Kỹ Thuật Dữ Liệu &amp; Mô Hình (Technical Benchmarks)</span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Chỉ số thực nghiệm</th>
+                  <th class="text-right">Kết quả đo kiểm</th>
+                  <th>Ghi chú phương pháp</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Fair Benchmark (Clean Data)</td>
+                  <td class="text-right num" style="color: #059669; font-weight: 700;">Tăng tốc 8.09x</td>
+                  <td>CSV 3.062s &rarr; Parquet 0.379s (19.58M dòng)</td>
+                </tr>
+                <tr>
+                  <td>Ingestion Benchmark (Raw Data)</td>
+                  <td class="text-right num" style="color: #059669; font-weight: 700;">Tăng tốc 8.33x</td>
+                  <td>CSV thô 5.150s &rarr; Parquet sạch 0.618s</td>
+                </tr>
+                <tr>
+                  <td>Tỷ lệ nén dữ liệu</td>
+                  <td class="text-right num" style="color: #059669; font-weight: 700;">Nén 4.92x</td>
+                  <td>2,321 MB CSV &rarr; 471.7 MB Parquet</td>
+                </tr>
+                <tr>
+                  <td>Thời gian fit K-Means (K=4)</td>
+                  <td class="text-right num">0.37s</td>
+                  <td>92,652 khách hàng Buyers trên không gian F1</td>
+                </tr>
+                <tr>
+                  <td>Độ ổn định ngẫu nhiên (ARI)</td>
+                  <td class="text-right num">0.9876 &plusmn; 0.0077</td>
+                  <td>Mean Adjusted Rand Index qua 5 random seeds</td>
+                </tr>
+                <tr>
+                  <td>Độ trung thực Cây Surrogate</td>
+                  <td class="text-right num">82.11%</td>
+                  <td>Test Fidelity của DecisionTree độ sâu 3</td>
+                </tr>
+                <tr>
+                  <td>Thông lượng Decision Engine</td>
+                  <td class="text-right num">296,528 khách/s</td>
+                  <td>Xử lý toàn bộ 1.34M khách trong 4.52s</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Lineage & SHA-256 Table -->
+      <div class="card" style="margin-top: 20px;">
+        <div class="card-title">
+          <span>Nguồn Gốc Dữ Liệu &amp; Mã Băm Toàn Vẹn (Data Lineage &amp; SHA-256 Hashes)</span>
+          <span style="font-size: 11px; color: var(--text-muted);">Kiểm toán bất biến</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Sản phẩm dữ liệu</th>
+                <th>Đường dẫn lưu trữ</th>
+                <th>Kích thước</th>
+                <th>Mã băm SHA-256 / Ghi chú kiểm toán</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Model Bundle</td>
+                <td><code>outputs/models/kmeans_best_model.joblib</code></td>
+                <td>42.3 KB</td>
+                <td><code style="font-size: 10px;">ab98e132480914abb028c8009fd090030eef73ebf0faee2fa6dbd05e13dc9bfc</code></td>
+              </tr>
+              <tr>
+                <td>Clean Parquet</td>
+                <td><code>data/cleaned/clean_events.parquet</code></td>
+                <td>471.74 MB</td>
+                <td>19,583,742 sự kiện sạch (4.92x nén từ 2.32 GB CSV)</td>
+              </tr>
+              <tr>
+                <td>Feature Table</td>
+                <td><code>data/features/customer_features.parquet</code></td>
+                <td>25.26 MB</td>
+                <td>1,341,499 hồ sơ khách hàng đầy đủ</td>
+              </tr>
+              <tr>
+                <td>Buyer Recs</td>
+                <td><code>outputs/recommendations/buyer_recommendations.parquet</code></td>
+                <td>1.12 MB</td>
+                <td>92,652 khuyến nghị đa dạng kèm evidence</td>
+              </tr>
+              <tr>
+                <td>Master Snapshot</td>
+                <td><code>outputs/dashboard/ivre_dashboard_snapshot.json</code></td>
+                <td>33.02 KB</td>
+                <td>Payload nhẹ tải trang &lt;50ms, Zero Raw PII</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Clean Minimalist Footer -->
+  <footer>
+    <div style="font-weight: 600; color: var(--text-main); margin-bottom: 4px;">IVRE ATELIER &bull; Customer Intelligence &amp; Decision Support System</div>
+    <div>Đồ án môn Phân Tích Dữ Liệu &bull; Khung phương pháp luận CRISP-DM &bull; REES46 Historical Research Demo (2019–2020)</div>
+    <div style="margin-top: 6px; font-size: 11px;">Mọi đề xuất tiếp thị đều ở trạng thái PENDING_CONSENT nhằm tuân thủ quy chuẩn Tiếp thị Có Trách nhiệm.</div>
+  </footer>
+
+  <!-- Interactive JavaScript -->
+  <script>
+    // Tab switching
+    function setTab(tabName, btn) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+      const pane = document.getElementById('pane-' + tabName);
+      if (pane) pane.classList.add('active');
+      if (btn) {
+        btn.classList.add('active');
+      } else if (window.event && window.event.currentTarget) {
+        window.event.currentTarget.classList.add('active');
+      }
+    }
+
+    // Archetype Data for Explorer
+    const archetypes = [
+      {
+        id: "ARC-01",
+        title: "Active VIP Champion",
+        cohort: "BUYER",
+        segment: "Cluster 1 · Core VIP Champions",
+        goal: "RETAIN_HIGH_VALUE",
+        tactic: "TAC_LOYALTY_VIP",
+        tactic_name: "Đặc quyền thành viên VIP nòng cốt",
+        behavior: { recency: "12.7 ngày (Median)", frequency: "3.0 phiên mua", monetary: "$117.69 (Median)", sessions_30d: "9.0 phiên", views_30d: "29 lượt", cart_30d: "5 phiên", activity_ratio: "+0.85" },
+        guardrails: ["G1_EXECUTION_CONSENT_CHECK", "G2_BUDGET_PROTECTION_VIP_WINBACK"],
+        reason: "Khách hàng VIP nòng cốt chi tiêu cao, duy trì giao dịch gần đây và tương tác đa kênh liên tục. Đề xuất đặc quyền tri ân và quyền truy cập sớm bộ sưu tập mới.",
+        evidence: "Recency: 12.7d <= 30d; Sessions 30d: 9 >= 2; Frequency: 3; Monetary: $117.69; Active Cart: 5.",
+        kpi: "vip_retention_rate_90d",
+        status: "PENDING_CONSENT"
+      },
+      {
+        id: "ARC-02",
+        title: "Cooling VIP (Silent)",
+        cohort: "BUYER",
+        segment: "Cluster 1 · Core VIP Champions",
+        goal: "REENGAGE_INACTIVE",
+        tactic: "TAC_WINBACK_SURVEY",
+        tactic_name: "Khảo sát hồi quy & Ưu đãi giá trị cao",
+        behavior: { recency: "45.0 ngày", frequency: "4 phiên mua", monetary: "$150.00", sessions_30d: "0 phiên", views_30d: "0 lượt", cart_30d: "0 phiên", activity_ratio: "-1.80" },
+        guardrails: ["G1_EXECUTION_CONSENT_CHECK", "G2_BUDGET_PROTECTION_VIP_WINBACK"],
+        reason: "Khách hàng VIP từng đóng góp lớn nhưng đã ngừng tương tác hoàn toàn trong 45 ngày qua. Đề xuất gửi khảo sát lý do gián đoạn dịch vụ kèm ưu đãi kích hoạt.",
+        evidence: "Recency: 45d > 30d; Monetary: $150.00 >= $40.0; Sessions 30d: 0; Cart 30d: 0.",
+        kpi: "winback_reactivation_rate",
+        status: "PENDING_CONSENT"
+      },
+      {
+        id: "ARC-03",
+        title: "Active Candidate Cart Prospect",
+        cohort: "BUYER",
+        segment: "Cluster 3 · Recently Active Repeat Prospects",
+        goal: "SUPPORT_CART_COMPLETION",
+        tactic: "TAC_CART_RECOVERY",
+        tactic_name: "Candidate Cart Follow-Up",
+        behavior: { recency: "16.3 ngày (Median)", frequency: "1.0 phiên mua", monetary: "$28.13 (Median)", sessions_30d: "3.0 phiên", views_30d: "8 lượt", cart_30d: "1 phiên", activity_ratio: "+1.10" },
+        guardrails: ["G1_EXECUTION_CONSENT_CHECK", "G4_CART_INTENT_PRECEDENCE"],
+        reason: "Khách hàng mới mua gần đây có tín hiệu thêm sản phẩm vào giỏ trong 30 ngày qua nhưng chưa phát sinh thanh toán (chưa xác minh trạng thái giỏ còn mở). Kích hoạt Guardrail G4 ưu tiên hỗ trợ hoàn tất giỏ hàng.",
+        evidence: "Cart Sessions 30d >= 1 AND Sessions 30d >= 1 (Candidate Cart Follow-Up, Guardrail G4 applied).",
+        kpi: "cart_checkout_rate",
+        status: "PENDING_CONSENT"
+      },
+      {
+        id: "ARC-04",
+        title: "High-Value At-Risk Cooling Down",
+        cohort: "BUYER",
+        segment: "Cluster 2 · At-Risk Cooling-Down Spenders",
+        goal: "REENGAGE_INACTIVE",
+        tactic: "TAC_WINBACK_SURVEY",
+        tactic_name: "Khảo sát Tái Kích hoạt & Ưu đãi Chọn lọc",
+        behavior: { recency: "54.3 ngày (Median)", frequency: "1.0 phiên mua", monetary: "$67.29 (Median)", sessions_30d: "0.0 phiên", views_30d: "0 lượt", cart_30d: "0 phiên", activity_ratio: "-0.69" },
+        guardrails: ["G1_EXECUTION_CONSENT_CHECK", "G2_BUDGET_PROTECTION_VIP_WINBACK"],
+        reason: "Khách hàng chi tiêu khá ($67.29) có nguy cơ rời bỏ do ngưng tương tác hơn 50 ngày. Đề xuất chiến dịch winback chuyên sâu.",
+        evidence: "Recency: 54.3d > 45d; Monetary: $67.29 >= $30.0; Sessions 30d: 0.",
+        kpi: "winback_reactivation_rate",
+        status: "PENDING_CONSENT"
+      },
+      {
+        id: "ARC-05",
+        title: "Low-Value Dormant Single Buyer",
+        cohort: "BUYER",
+        segment: "Cluster 0 · Dormant Low-Value Single Buyers",
+        goal: "LOW_COST_NURTURE",
+        tactic: "TAC_LOW_COST_NURTURE",
+        tactic_name: "Bản tin Xu hướng Mùa Chi phí Thấp",
+        behavior: { recency: "82.3 ngày (Median)", frequency: "1.0 phiên mua", monetary: "$20.24 (Median)", sessions_30d: "0.0 phiên", views_30d: "0 lượt", cart_30d: "0 phiên", activity_ratio: "0.00" },
+        guardrails: ["G1_EXECUTION_CONSENT_CHECK"],
+        reason: "Khách mua 1 lần giá trị thấp đã ngưng hoạt động. Đề xuất duy trì hiện diện thụ động qua bản tin tự động chi phí thấp.",
+        evidence: "Recency: 82.3d > 60d; Monetary: $20.24 < $30.0; Sessions 30d: 0.",
+        kpi: "newsletter_open_rate",
+        status: "PENDING_CONSENT"
+      },
+      {
+        id: "ARC-06",
+        title: "Deep Dormant Budget Guarded",
+        cohort: "BUYER",
+        segment: "Cluster 0 · Dormant Low-Value Single Buyers",
+        goal: "NO_ACTION",
+        tactic: "TAC_NO_ACTION",
+        tactic_name: "Không can thiệp (Bảo vệ ngân sách tiếp thị)",
+        behavior: { recency: "110 ngày", frequency: "1 phiên mua", monetary: "$8.50", sessions_30d: "0 phiên", views_30d: "0 lượt", cart_30d: "0 phiên", activity_ratio: "0.00" },
+        guardrails: ["G1_EXECUTION_CONSENT_CHECK", "G3_BUDGET_PROTECTION_DEEP_DORMANT"],
+        reason: "Khách mua giá trị thấp ngủ đông sâu (>110 ngày, không có phiên truy cập gần đây). Kích hoạt Guardrail G3 cắt giảm hoàn toàn chi phí tiếp thị vô ích.",
+        evidence: "Recency: 110d > 90d; Monetary: $8.50 < $20.0; Sessions 30d: 0 (Guardrail G3 activated).",
+        kpi: "unsolicited_contact_prevention_rate",
+        status: "PENDING_CONSENT"
+      },
+      {
+        id: "ARC-07",
+        title: "High-Intent Non-Buyer",
+        cohort: "NON_BUYER",
+        segment: "NonBuyer_HIGH_INTENT",
+        goal: "SUPPORT_CART_COMPLETION",
+        tactic: "TAC_CART_RECOVERY",
+        tactic_name: "Candidate Cart Follow-Up",
+        behavior: { recency: "Chưa từng mua", frequency: "0 phiên", monetary: "$0.00", sessions_30d: "3 phiên", views_30d: "15 lượt", cart_30d: "1 phiên", activity_ratio: "+0.95" },
+        guardrails: ["G1_EXECUTION_CONSENT_CHECK", "G4_CART_INTENT_PRECEDENCE"],
+        reason: "Người dùng chưa mua nhưng có ý định cao: có tín hiệu thêm giỏ trong cửa sổ quan sát 30 ngày gần đây và duyệt web tích cực (chưa xác minh trạng thái giỏ còn mở). Đề xuất hỗ trợ chuyển đổi đơn đầu tiên.",
+        evidence: "Cart Sessions 30d >= 1 AND Sessions 30d >= 2 (Candidate Cart Follow-Up).",
+        kpi: "first_time_buyer_conversion",
+        status: "PENDING_CONSENT"
+      },
+      {
+        id: "ARC-08",
+        title: "Cold Bounce Inactive",
+        cohort: "NON_BUYER",
+        segment: "NonBuyer_INACTIVE",
+        goal: "NO_ACTION",
+        tactic: "TAC_NO_ACTION",
+        tactic_name: "Không can thiệp (Chống spam mỏi mệt)",
+        behavior: { recency: "Chưa từng mua", frequency: "0 phiên", monetary: "$0.00", sessions_30d: "0 phiên", views_30d: "0 lượt", cart_30d: "0 phiên", activity_ratio: "0.00" },
+        guardrails: ["G1_EXECUTION_CONSENT_CHECK", "G5_CONTACT_FATIGUE_PREVENTION"],
+        reason: "Người dùng vãng lai vào xem 1 lượt từ tháng trước rồi thoát. Kích hoạt Guardrail G5 loại bỏ khỏi danh sách tiếp thị để bảo vệ danh tiếng gửi tin.",
+        evidence: "Sessions 30d: 0; Cart 30d: 0; Lifetime Sessions: 1 (Guardrail G5 activated).",
+        kpi: "unsolicited_contact_prevention_rate",
+        status: "PENDING_CONSENT"
+      }
+    ];
+
+    function renderArchetypeList() {
+      const container = document.getElementById("arch-list");
+      container.innerHTML = archetypes.map((a, i) => `
+        <div class="arch-item ${i === 0 ? 'active' : ''}" onclick="selectArch(${i})">
+          <div style="font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">${a.id} &bull; ${a.cohort}</div>
+          <div style="font-weight: 600; color: var(--text-main); font-size: 13px; margin-top: 2px;">${a.title}</div>
+        </div>
+      `).join('');
+      renderArchDetail(0);
+    }
+
+    function selectArch(index) {
+      document.querySelectorAll('.arch-item').forEach((el, i) => {
+        el.classList.toggle('active', i === index);
+      });
+      renderArchDetail(index);
+    }
+
+    function renderArchDetail(index) {
+      const a = archetypes[index];
+      const container = document.getElementById("arch-detail");
+      container.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--border-light);">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="kpi-tag" style="background: var(--primary-light); color: var(--primary); font-weight: 700;">${a.id}</span>
+              <span style="font-size: 16px; font-weight: 700; color: var(--text-main);">${a.title}</span>
+            </div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">Phân khúc gán nhãn: <strong>${a.segment}</strong></div>
+          </div>
+          <div>
+            <span class="badge-pending">${a.status}</span>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div style="background: var(--bg-subtle); padding: 14px; border-radius: var(--radius-sm);">
+            <div class="kpi-label" style="margin-bottom: 8px;">Bằng chứng hành vi quan sát (Evidence)</div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 12px;">
+              <div>Recency: <strong class="num">${a.behavior.recency}</strong></div>
+              <div>Frequency: <strong class="num">${a.behavior.frequency}</strong></div>
+              <div>Monetary: <strong class="num">${a.behavior.monetary}</strong></div>
+              <div>Phiên 30d: <strong class="num">${a.behavior.sessions_30d}</strong></div>
+              <div>Lượt xem 30d: <strong class="num">${a.behavior.views_30d}</strong></div>
+              <div>Phiên giỏ 30d: <strong class="num">${a.behavior.cart_30d}</strong></div>
+              <div>Xung lượng 30d: <strong class="num">${a.behavior.activity_ratio}</strong></div>
+            </div>
+          </div>
+
+          <div style="background: var(--bg-subtle); padding: 14px; border-radius: var(--radius-sm); border-left: 3px solid var(--primary);">
+            <div class="kpi-label" style="margin-bottom: 8px;">Khuyến nghị tiếp thị (Prescriptive Action)</div>
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Mục Tiêu Chiến Lược:</div>
+            <div style="font-weight: 700; color: var(--primary); font-size: 13px; margin-bottom: 6px;">${a.goal}</div>
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Chiến Thuật Ứng Viên:</div>
+            <div style="font-weight: 700; color: var(--text-main); font-size: 13px; margin-bottom: 6px;"><code>${a.tactic}</code> &bull; ${a.tactic_name}</div>
+            <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">KPI Đánh Giá:</div>
+            <div class="num" style="color: #059669; font-weight: 600; font-size: 12px;">${a.kpi}</div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 12px; line-height: 1.5;">
+          <div style="background: #ffffff; border: 1px solid var(--border-light); padding: 12px; border-radius: var(--radius-sm);">
+            <div style="font-weight: 700; color: var(--text-main); margin-bottom: 3px;">1. Tại sao hệ thống đề xuất chiến thuật này? (Rationale)</div>
+            <div style="color: var(--text-body);">${a.reason}</div>
+          </div>
+
+          <div style="background: #ffffff; border: 1px solid var(--border-light); padding: 12px; border-radius: var(--radius-sm);">
+            <div style="font-weight: 700; color: var(--text-main); margin-bottom: 3px;">2. Bằng chứng vi mô kích hoạt điều kiện: (Evidence Rule)</div>
+            <code style="color: var(--primary); font-size: 11px;">${a.evidence}</code>
+          </div>
+
+          <div style="background: #ffffff; border: 1px solid var(--border-light); padding: 12px; border-radius: var(--radius-sm);">
+            <div style="font-weight: 700; color: var(--text-main); margin-bottom: 4px;">3. Rào cản an toàn được áp dụng: (Guardrails)</div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              ${a.guardrails.map(g => `<span class="kpi-tag" style="background: #f1f5f9; color: #475569;">${g}</span>`).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderArchetypeList();
+    });
+  </script>
+</body>
+</html>

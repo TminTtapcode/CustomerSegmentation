@@ -1,0 +1,31 @@
+{
+  "model_version": "v1.0.0-f1-std-k4",
+  "model_hash_sha256": "ab98e132480914abb028c8009fd090030eef73ebf0faee2fa6dbd05e13dc9bfc",
+  "selected_feature_space": "F1 (7 Dimensions: RFM + 30-day Engagement)",
+  "selected_scaler": "StandardScaler after log1p on 5 skewed features",
+  "clustering_algorithm": "Standard K-Means (k-means++ initialization)",
+  "k_clusters": 4,
+  "internal_validation": {
+    "silhouette_score": 0.2828,
+    "davies_bouldin_index": 1.4173,
+    "mean_initialization_ari": 0.9876,
+    "min_cluster_proportion": 9.45
+  },
+  "surrogate_explainer": {
+    "algorithm": "DecisionTreeClassifier (max_depth=3)",
+    "test_fidelity": 82.11,
+    "discrepancy_rate": 17.89,
+    "role_note": "Approximate visual explainer only. Decision engine uses true cluster_id."
+  },
+  "performance_benchmarks": {
+    "profiling_runtime_s": 78.39,
+    "etl_runtime_s": 212.18,
+    "feature_engineering_s": 11.25,
+    "clustering_screening_stability_s": 131.53,
+    "winning_fit_time_s": 0.37,
+    "holdout_evaluation_s": 25.85,
+    "decision_engine_s": 4.52,
+    "decision_engine_throughput": 296528.0,
+    "parquet_query_speedup": "8.09x median fair benchmark"
+  }
+}

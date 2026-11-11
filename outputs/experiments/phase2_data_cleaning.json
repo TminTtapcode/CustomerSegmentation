@@ -1,0 +1,110 @@
+{
+  "phase": "P2_DATA_PREPARATION",
+  "timestamp_utc": "2026-11-06T16:55:46Z",
+  "hardware": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu_count": 16,
+    "duckdb_version": "2.0.0",
+    "duckdb_memory_limit": "2GB",
+    "duckdb_threads": 4
+  },
+  "performance": {
+    "wall_time_seconds": 212.18,
+    "throughput_rows_per_second": 97524.9,
+    "baseline_rss_mb": 31.84,
+    "peak_rss_mb": 2379.03,
+    "rss_delta_mb": 2347.19,
+    "step_timings_seconds": {
+      "step1_validation": 1.81,
+      "step2_cleaning_staging": 30.86,
+      "step3_parquet_export": 134.79,
+      "step4_audit_reconciliation": 38.92,
+      "step5_benchmark_csv": 5.15,
+      "step5_benchmark_parquet": 0.62
+    },
+    "empirical_speedup_parquet_vs_csv": 8.33
+  },
+  "reconciliation": {
+    "raw_rows_total": 20692840,
+    "exact_duplicates_removed": 1109098,
+    "clean_distinct_rows": 19583742,
+    "deduplication_rate_pct": 5.36,
+    "clean_observation_rows": 15667350,
+    "clean_holdout_rows": 3916392,
+    "raw_input_mb": 2321.51,
+    "clean_parquet_mb": 471.74,
+    "observation_parquet_mb": 376.7,
+    "holdout_parquet_mb": 95.02,
+    "compression_ratio": 4.92
+  },
+  "quality_flags_summary": {
+    "MISSING_CATEGORY": 11057567,
+    "MISSING_BRAND_AND_CATEGORY": 8094141,
+    "VALID": 258400,
+    "PRICE_ZERO": 86325,
+    "MISSING_BRAND": 83100,
+    "MISSING_SESSION": 4085,
+    "PRICE_NEGATIVE": 124
+  },
+  "monetary_reconciliation": {
+    "raw_purchases": 1044221.0,
+    "valid_purchases": 1044133.0,
+    "excluded_purchases_count": 88.0,
+    "raw_purchase_price_sum": 5138624.02,
+    "clean_valid_monetary_sum": 5141266.9,
+    "excluded_price_sum": -2642.88
+  },
+  "session_reconciliation": {
+    "distinct_session_uuids_raw": 4535941,
+    "distinct_session_uuids_clean": 4535941,
+    "session_uuid_delta": 0,
+    "distinct_composite_sessions_raw_non_null": 4536272,
+    "distinct_composite_sessions_clean_non_null": 4536272,
+    "composite_session_delta": 0,
+    "session_collisions_raw_uuids_with_multiple_users": 331,
+    "session_collisions_clean_user_session_id": 0,
+    "users_with_null_session_raw": 1533,
+    "rows_with_null_session_raw": 4598,
+    "rows_with_null_session_clean": 4085,
+    "explanation": "No sessions were lost due to deduplication. The difference of 1,533 between raw composite-with-null (4,537,805) and clean non-null (4,536,272) was entirely due to NULL session handling: 1,533 users had NULL session_id which COUNT(DISTINCT user_session_id) excludes in SQL."
+  },
+  "monetary_3step_reconciliation": {
+    "currency_unit": "currency_units (unspecified source currency)",
+    "step1_raw_purchase_events": 1045014,
+    "step1_raw_purchase_sum": 5141715.66,
+    "step2_dedup_purchase_events": 1044221,
+    "step2_dedup_purchase_sum": 5138624.02,
+    "step2_dedup_delta": -3091.64,
+    "step2_duplicate_events_removed": 793,
+    "step3_valid_monetary_events": 1044133,
+    "step3_valid_monetary_sum": 5141266.9,
+    "step3_invalid_price_delta": 2642.88,
+    "step3_invalid_purchases_excluded": 88,
+    "step3_negative_purchases_count": 87,
+    "step3_negative_purchases_sum": -2642.88,
+    "step3_zero_purchases_count": 1,
+    "net_change_step1_to_step3": -448.76
+  },
+  "storage_reconciliation": {
+    "clean_events_parquet_mb": 474.71,
+    "observation_events_parquet_mb": 379.06,
+    "holdout_events_parquet_mb": 95.63,
+    "total_physical_storage_on_disk_mb": 949.4,
+    "minimal_deployment_storage_mb": 474.69,
+    "redundancy_explanation": "clean_events.parquet is an exact concatenation of observation + holdout, retained during Phase 2 for cross-dataset audit. In production, observation + holdout (474.69 MB) is sufficient."
+  },
+  "fair_benchmark": {
+    "comparison_record_set": "EXACT SAME 19,583,742 clean rows on both CSV and Parquet",
+    "csv_median_seconds": 3.062409099999968,
+    "csv_cold_seconds": 3.615754999999808,
+    "csv_mean_seconds": 3.1709267800000815,
+    "csv_stdev_seconds": 0.25067506489100977,
+    "parquet_median_seconds": 0.3785945999998148,
+    "parquet_cold_seconds": 0.5503257999998823,
+    "parquet_mean_seconds": 0.42729633999988437,
+    "parquet_stdev_seconds": 0.07685581125133216,
+    "fair_speedup_median": 8.088887427346998,
+    "fair_speedup_cold": 6.570208047670274,
+    "note": "Speedup on identical 19.58M rows is 8.09x on median runtime (6.57x on cold cache). Speedup on arbitrary Phase 3 queries will vary based on projection pushdown and query complexity."
+  }
+}

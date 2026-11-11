@@ -1,0 +1,452 @@
+{
+  "tactic_distribution": [
+    {
+      "tactic_code": "TAC_NO_ACTION",
+      "name": "Không can thiệp (Bảo vệ ngân sách)",
+      "name_en": "No Action (Budget Protection & Anti-Spam)",
+      "channel": "None",
+      "cost_level": "Zero ($0.00)",
+      "desc": "Triệt tiêu gửi thông điệp rác vào tài khoản ngủ đông sâu hoặc khách vãng lai đã thoát.",
+      "marketing_goal": "NO_ACTION",
+      "total_count": 892508,
+      "pct_of_population": 66.53,
+      "buyers_count": 6433,
+      "non_buyers_count": 886075,
+      "primary_kpi": "unsolicited_contact_prevention_rate"
+    },
+    {
+      "tactic_code": "TAC_LOW_COST_NURTURE",
+      "name": "Bản tin nuôi dưỡng chi phí thấp",
+      "name_en": "Low-Cost Automated Nurture",
+      "channel": "Automated Email Newsletter",
+      "cost_level": "Extremely Low (~$0.001 - $0.005)",
+      "desc": "Bản tin tổng hợp xu hướng, cẩm nang làm đẹp đại trà tự động theo tuần/tháng.",
+      "marketing_goal": "LOW_COST_NURTURE",
+      "total_count": 282108,
+      "pct_of_population": 21.03,
+      "buyers_count": 35391,
+      "non_buyers_count": 246717,
+      "primary_kpi": "newsletter_open_rate"
+    },
+    {
+      "tactic_code": "TAC_PRODUCT_EDU",
+      "name": "Giáo dục sản phẩm & Khám phá danh mục",
+      "name_en": "Product Education & Category Discovery",
+      "channel": "In-app / Web Banner / Email",
+      "cost_level": "Low (~$0.005)",
+      "desc": "Hướng dẫn chăm sóc da, thành phần nổi bật, top sản phẩm bán chạy cho khách đang tìm hiểu.",
+      "marketing_goal": "INCREASE_PRODUCT_DISCOVERY",
+      "total_count": 85166,
+      "pct_of_population": 6.35,
+      "buyers_count": 3172,
+      "non_buyers_count": 81994,
+      "primary_kpi": "first_time_buyer_conversion"
+    },
+    {
+      "tactic_code": "TAC_CART_RECOVERY",
+      "name": "Candidate Cart Follow-Up",
+      "name_en": "Candidate Cart Follow-Up",
+      "channel": "Web Push / Direct Notification",
+      "cost_level": "Low-Medium (~$0.01)",
+      "desc": "Nhắc nhở và hỗ trợ tháo gỡ rào cản thanh toán cho khách hàng có tín hiệu thêm giỏ trong cửa sổ quan sát gần đây (lưu ý: chưa xác minh trạng thái giỏ còn mở).",
+      "marketing_goal": "SUPPORT_CART_COMPLETION",
+      "total_count": 60351,
+      "pct_of_population": 4.5,
+      "buyers_count": 26290,
+      "non_buyers_count": 34061,
+      "primary_kpi": "cart_checkout_rate"
+    },
+    {
+      "tactic_code": "TAC_WINBACK_SURVEY",
+      "name": "Khảo sát hồi quy & Ưu đãi giá trị cao",
+      "name_en": "VIP/At-Risk Winback Survey & Offer",
+      "channel": "Personalized Email / Dedicated Care",
+      "cost_level": "Medium-High (~$0.05)",
+      "desc": "Khảo sát lý do gián đoạn kèm mã kích hoạt riêng biệt dành cho khách hàng từng có đóng góp cao.",
+      "marketing_goal": "REENGAGE_INACTIVE",
+      "total_count": 13196,
+      "pct_of_population": 0.98,
+      "buyers_count": 13196,
+      "non_buyers_count": 0,
+      "primary_kpi": "winback_reactivation_rate"
+    },
+    {
+      "tactic_code": "TAC_LOYALTY_VIP",
+      "name": "Đặc quyền thành viên VIP nòng cốt",
+      "name_en": "VIP Tier Loyalty & Early Access",
+      "channel": "Concierge / Exclusive Loyalty Portal",
+      "cost_level": "High (Dedicated Services)",
+      "desc": "Tri ân quà tặng sinh nhật, quyền truy cập sớm sản phẩm mới và quản lý khách hàng riêng biệt.",
+      "marketing_goal": "RETAIN_HIGH_VALUE",
+      "total_count": 7418,
+      "pct_of_population": 0.55,
+      "buyers_count": 7418,
+      "non_buyers_count": 0,
+      "primary_kpi": "vip_retention_rate_90d"
+    },
+    {
+      "tactic_code": "TAC_CROSS_SELL",
+      "name": "Gợi ý bán chéo danh mục bổ trợ",
+      "name_en": "Personalized Cross-Sell",
+      "channel": "On-site Recommendation / Post-order",
+      "cost_level": "Low (~$0.005)",
+      "desc": "Đề xuất bộ dưỡng đi kèm hoặc sản phẩm cùng bộ cho khách mới mua gần đây.",
+      "marketing_goal": "ENCOURAGE_REPEAT_PURCHASE",
+      "total_count": 674,
+      "pct_of_population": 0.05,
+      "buyers_count": 674,
+      "non_buyers_count": 0,
+      "primary_kpi": "cross_category_adoption_rate"
+    },
+    {
+      "tactic_code": "TAC_POST_PURCHASE_CARE",
+      "name": "Chăm sóc trải nghiệm sau sự kiện mua",
+      "name_en": "Post-Purchase Care & Review",
+      "channel": "Automated Survey & Care Guide",
+      "cost_level": "Low (~$0.005)",
+      "desc": "Hướng dẫn sử dụng và khảo sát trải nghiệm sau sự kiện mua hàng được ghi nhận (lưu ý: dataset không có bằng chứng giao hàng thành công).",
+      "marketing_goal": "ENCOURAGE_REPEAT_PURCHASE",
+      "total_count": 78,
+      "pct_of_population": 0.01,
+      "buyers_count": 78,
+      "non_buyers_count": 0,
+      "primary_kpi": "second_order_conversion_rate"
+    }
+  ],
+  "diversity_matrix": {
+    "0": [
+      {
+        "tactic_code": "TAC_LOW_COST_NURTURE",
+        "count": 31731,
+        "pct_in_cluster": 75.29
+      },
+      {
+        "tactic_code": "TAC_NO_ACTION",
+        "count": 6433,
+        "pct_in_cluster": 15.26
+      },
+      {
+        "tactic_code": "TAC_PRODUCT_EDU",
+        "count": 2977,
+        "pct_in_cluster": 7.06
+      },
+      {
+        "tactic_code": "TAC_CART_RECOVERY",
+        "count": 1004,
+        "pct_in_cluster": 2.38
+      }
+    ],
+    "1": [
+      {
+        "tactic_code": "TAC_LOYALTY_VIP",
+        "count": 7418,
+        "pct_in_cluster": 84.73
+      },
+      {
+        "tactic_code": "TAC_CART_RECOVERY",
+        "count": 1287,
+        "pct_in_cluster": 14.7
+      },
+      {
+        "tactic_code": "TAC_WINBACK_SURVEY",
+        "count": 27,
+        "pct_in_cluster": 0.31
+      },
+      {
+        "tactic_code": "TAC_POST_PURCHASE_CARE",
+        "count": 23,
+        "pct_in_cluster": 0.26
+      }
+    ],
+    "2": [
+      {
+        "tactic_code": "TAC_WINBACK_SURVEY",
+        "count": 13169,
+        "pct_in_cluster": 70.77
+      },
+      {
+        "tactic_code": "TAC_LOW_COST_NURTURE",
+        "count": 3660,
+        "pct_in_cluster": 19.67
+      },
+      {
+        "tactic_code": "TAC_CART_RECOVERY",
+        "count": 1779,
+        "pct_in_cluster": 9.56
+      }
+    ],
+    "3": [
+      {
+        "tactic_code": "TAC_CART_RECOVERY",
+        "count": 22220,
+        "pct_in_cluster": 96.01
+      },
+      {
+        "tactic_code": "TAC_CROSS_SELL",
+        "count": 674,
+        "pct_in_cluster": 2.91
+      },
+      {
+        "tactic_code": "TAC_PRODUCT_EDU",
+        "count": 195,
+        "pct_in_cluster": 0.84
+      },
+      {
+        "tactic_code": "TAC_POST_PURCHASE_CARE",
+        "count": 55,
+        "pct_in_cluster": 0.24
+      }
+    ]
+  },
+  "hypothetical_cost_avoidance": {
+    "title": "Hypothetical Marketing Cost Avoidance Scenario",
+    "rationale": "REES46 dataset does not track real-world marketing dispatch costs or execution schedules. This scenario evaluates theoretical cost efficiency under conservative simulation parameters.",
+    "simulated_audience_suppressed": 892508,
+    "suppressed_pct_of_population": 66.53,
+    "parameters": {
+      "simulated_frequency": "1 message per customer per week",
+      "low_cost_unit_rate_usd": 0.005,
+      "medium_cost_unit_rate_usd": 0.02
+    },
+    "projected_cost_avoidance_usd": {
+      "weekly_low_estimate": 4462.54,
+      "weekly_high_estimate": 17850.16,
+      "monthly_low_estimate": 17850.16,
+      "monthly_high_estimate": 71400.64
+    },
+    "governance_note": "Suppressing inactive profiles prevents brand spam reputation loss and preserves marketing ROI for engaged prospects."
+  },
+  "archetype_samples": [
+    {
+      "demo_id": "DEMO_BUYER_01",
+      "archetype_name": "Active VIP Champion",
+      "cohort": "BUYER",
+      "segment_name": "Cluster 1 · Core VIP Champions",
+      "observation_behavior": {
+        "recency_days": 5.0,
+        "frequency": 12,
+        "monetary_usd": 350.0,
+        "sessions_30d": 9,
+        "views_30d": 24,
+        "cart_sessions_30d": 2,
+        "log_activity_ratio": 1.25
+      },
+      "marketing_goal": "RETAIN_HIGH_VALUE",
+      "recommended_tactic": "TAC_LOYALTY_VIP",
+      "reason_codes": [
+        "HIGH_HISTORICAL_SPEND",
+        "REPEAT_PURCHASER",
+        "ACTIVE_RECENT_ENGAGEMENT"
+      ],
+      "explanation": "Khách hàng VIP nòng cốt chi tiêu cao ($350.00) duy trì giao dịch gần đây (5 ngày) và tương tác đa kênh liên tục. Đề xuất đặc quyền tri ân và truy cập sớm BST.",
+      "guardrails_applied": [
+        "G1_EXECUTION_CONSENT_CHECK",
+        "G2_BUDGET_PROTECTION_VIP_WINBACK"
+      ],
+      "eligibility_status": "PENDING_CONSENT",
+      "evaluation_kpi": "vip_retention_rate_90d"
+    },
+    {
+      "demo_id": "DEMO_BUYER_02",
+      "archetype_name": "Cooling VIP (Silent)",
+      "cohort": "BUYER",
+      "segment_name": "Cluster 1 · Core VIP Champions",
+      "observation_behavior": {
+        "recency_days": 50.0,
+        "frequency": 8,
+        "monetary_usd": 280.0,
+        "sessions_30d": 0,
+        "views_30d": 0,
+        "cart_sessions_30d": 0,
+        "log_activity_ratio": -1.8
+      },
+      "marketing_goal": "REENGAGE_INACTIVE",
+      "recommended_tactic": "TAC_WINBACK_SURVEY",
+      "reason_codes": [
+        "HIGH_HISTORICAL_SPEND",
+        "PROLONGED_ABSENCE",
+        "WINBACK_CANDIDATE"
+      ],
+      "explanation": "Khách hàng VIP từng đóng góp lớn nhưng đã ngừng tương tác trong 50 ngày qua. Đề xuất gửi khảo sát lý do gián đoạn kèm ưu đãi kích hoạt.",
+      "guardrails_applied": [
+        "G1_EXECUTION_CONSENT_CHECK",
+        "G2_BUDGET_PROTECTION_VIP_WINBACK"
+      ],
+      "eligibility_status": "PENDING_CONSENT",
+      "evaluation_kpi": "winback_reactivation_rate"
+    },
+    {
+      "demo_id": "DEMO_BUYER_03",
+      "archetype_name": "Active Repeat Prospect with Recent Cart",
+      "cohort": "BUYER",
+      "segment_name": "Cluster 3 · Recently Active Repeat Prospects",
+      "observation_behavior": {
+        "recency_days": 3.0,
+        "frequency": 2,
+        "monetary_usd": 45.0,
+        "sessions_30d": 4,
+        "views_30d": 11,
+        "cart_sessions_30d": 2,
+        "log_activity_ratio": 0.85
+      },
+      "marketing_goal": "SUPPORT_CART_COMPLETION",
+      "recommended_tactic": "TAC_CART_RECOVERY",
+      "reason_codes": [
+        "ACTIVE_CART_ADDITIONS",
+        "HIGH_PURCHASE_INTENT",
+        "CHECKOUT_BARRIER_SUSPECTED"
+      ],
+      "explanation": "Khách hàng mới mua gần đây vừa thêm sản phẩm vào giỏ nhưng chưa thanh toán. Áp dụng Guardrail G4 ưu tiên cứu giỏ hàng trong 48 giờ.",
+      "guardrails_applied": [
+        "G1_EXECUTION_CONSENT_CHECK",
+        "G4_CART_INTENT_PRECEDENCE"
+      ],
+      "eligibility_status": "PENDING_CONSENT",
+      "evaluation_kpi": "cart_checkout_rate"
+    },
+    {
+      "demo_id": "DEMO_BUYER_04",
+      "archetype_name": "High-Value At-Risk Cooling Down",
+      "cohort": "BUYER",
+      "segment_name": "Cluster 2 · At-Risk Cooling-Down Spenders",
+      "observation_behavior": {
+        "recency_days": 65.0,
+        "frequency": 3,
+        "monetary_usd": 110.0,
+        "sessions_30d": 0,
+        "views_30d": 0,
+        "cart_sessions_30d": 0,
+        "log_activity_ratio": -1.5
+      },
+      "marketing_goal": "REENGAGE_INACTIVE",
+      "recommended_tactic": "TAC_WINBACK_SURVEY",
+      "reason_codes": [
+        "SIGNIFICANT_HISTORICAL_SPEND",
+        "COOLING_DOWN_ENGAGEMENT",
+        "HIGH_RISK_ATTRITION"
+      ],
+      "explanation": "Khách hàng chi tiêu khá ($110.00) có nguy cơ rời bỏ do ngưng tương tác hơn 2 tháng. Đề xuất chiến dịch winback chuyên sâu.",
+      "guardrails_applied": [
+        "G1_EXECUTION_CONSENT_CHECK",
+        "G2_BUDGET_PROTECTION_VIP_WINBACK"
+      ],
+      "eligibility_status": "PENDING_CONSENT",
+      "evaluation_kpi": "winback_reactivation_rate"
+    },
+    {
+      "demo_id": "DEMO_BUYER_05",
+      "archetype_name": "Low-Value Dormant Single Buyer",
+      "cohort": "BUYER",
+      "segment_name": "Cluster 0 · Dormant Low-Value Single Buyers",
+      "observation_behavior": {
+        "recency_days": 45.0,
+        "frequency": 1,
+        "monetary_usd": 15.0,
+        "sessions_30d": 0,
+        "views_30d": 0,
+        "cart_sessions_30d": 0,
+        "log_activity_ratio": 0.0
+      },
+      "marketing_goal": "LOW_COST_NURTURE",
+      "recommended_tactic": "TAC_LOW_COST_NURTURE",
+      "reason_codes": [
+        "LOW_OR_DORMANT_ACTIVITY",
+        "COST_CONSTRAINED_REACH",
+        "PASSIVE_ENGAGEMENT"
+      ],
+      "explanation": "Khách mua 1 lần giá trị thấp đã ngưng hoạt động. Đề xuất duy trì hiện diện thụ động qua bản tin tự động chi phí thấp.",
+      "guardrails_applied": [
+        "G1_EXECUTION_CONSENT_CHECK"
+      ],
+      "eligibility_status": "PENDING_CONSENT",
+      "evaluation_kpi": "newsletter_open_rate"
+    },
+    {
+      "demo_id": "DEMO_BUYER_06",
+      "archetype_name": "Deep Dormant Budget Guarded",
+      "cohort": "BUYER",
+      "segment_name": "Cluster 0 · Dormant Low-Value Single Buyers",
+      "observation_behavior": {
+        "recency_days": 110.0,
+        "frequency": 1,
+        "monetary_usd": 8.5,
+        "sessions_30d": 0,
+        "views_30d": 0,
+        "cart_sessions_30d": 0,
+        "log_activity_ratio": 0.0
+      },
+      "marketing_goal": "NO_ACTION",
+      "recommended_tactic": "TAC_NO_ACTION",
+      "reason_codes": [
+        "DEEP_DORMANCY",
+        "LOW_HISTORICAL_VALUE",
+        "GUARDRAIL_G3_BUDGET_PROTECTION"
+      ],
+      "explanation": "Khách mua giá trị thấp ngủ đông sâu (>110 ngày). Kích hoạt Guardrail G3 cắt giảm hoàn toàn chi phí tiếp thị vô ích.",
+      "guardrails_applied": [
+        "G1_EXECUTION_CONSENT_CHECK",
+        "G3_BUDGET_PROTECTION_DEEP_DORMANT"
+      ],
+      "eligibility_status": "PENDING_CONSENT",
+      "evaluation_kpi": "unsolicited_contact_prevention_rate"
+    },
+    {
+      "demo_id": "DEMO_NON_BUYER_01",
+      "archetype_name": "High-Intent Cart Prospect",
+      "cohort": "NON_BUYER",
+      "segment_name": "NonBuyer_HIGH_INTENT",
+      "observation_behavior": {
+        "recency_days": null,
+        "frequency": 0,
+        "monetary_usd": 0.0,
+        "sessions_30d": 3,
+        "views_30d": 15,
+        "cart_sessions_30d": 1,
+        "log_activity_ratio": 0.95
+      },
+      "marketing_goal": "SUPPORT_CART_COMPLETION",
+      "recommended_tactic": "TAC_CART_RECOVERY",
+      "reason_codes": [
+        "NON_BUYER_HIGH_INTENT",
+        "ACTIVE_CART_ADDITIONS",
+        "FIRST_ORDER_OPPORTUNITY"
+      ],
+      "explanation": "Người dùng chưa mua nhưng có ý định cao (có giỏ hàng gần đây và 3 phiên truy cập). Đề xuất hỗ trợ chuyển đổi đơn đầu tiên.",
+      "guardrails_applied": [
+        "G1_EXECUTION_CONSENT_CHECK",
+        "G4_CART_INTENT_PRECEDENCE"
+      ],
+      "eligibility_status": "PENDING_CONSENT",
+      "evaluation_kpi": "first_time_buyer_conversion"
+    },
+    {
+      "demo_id": "DEMO_NON_BUYER_02",
+      "archetype_name": "Cold Bounce Inactive",
+      "cohort": "NON_BUYER",
+      "segment_name": "NonBuyer_INACTIVE",
+      "observation_behavior": {
+        "recency_days": null,
+        "frequency": 0,
+        "monetary_usd": 0.0,
+        "sessions_30d": 0,
+        "views_30d": 0,
+        "cart_sessions_30d": 0,
+        "log_activity_ratio": 0.0
+      },
+      "marketing_goal": "NO_ACTION",
+      "recommended_tactic": "TAC_NO_ACTION",
+      "reason_codes": [
+        "NON_BUYER_INACTIVE",
+        "PROLONGED_DORMANCY",
+        "GUARDRAIL_G5_FATIGUE_PREVENTION"
+      ],
+      "explanation": "Người dùng vãng lai vào xem 1 lượt từ tháng trước rồi thoát. Kích hoạt Guardrail G5 loại bỏ khỏi danh sách tiếp thị.",
+      "guardrails_applied": [
+        "G1_EXECUTION_CONSENT_CHECK",
+        "G5_CONTACT_FATIGUE_PREVENTION"
+      ],
+      "eligibility_status": "PENDING_CONSENT",
+      "evaluation_kpi": "unsolicited_contact_prevention_rate"
+    }
+  ]
+}

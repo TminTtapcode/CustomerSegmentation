@@ -1,0 +1,31 @@
+{
+  "model_version": "v1.0.0-f1-std-k4",
+  "model_sha256": "ab98e132480914abb028c8009fd090030eef73ebf0faee2fa6dbd05e13dc9bfc",
+  "created_at": "2026-11-09T16:10:42Z",
+  "cluster_mapping": {
+    "0": {
+      "cluster_id": 0,
+      "name_en": "Dormant Low-Value Single Buyers",
+      "name_vi": "Khách Mua 1 Lần Ngủ Đông Giá Trị Thấp",
+      "rationale": "High recency (med 82d), single low spend (med 20), zero 30d engagement, low future conversion (2.66%)."
+    },
+    "1": {
+      "cluster_id": 1,
+      "name_en": "Core VIP Champions",
+      "name_vi": "Khách VIP Trung Thành Cốt Lõi",
+      "rationale": "Recent recency (med 13d), repeat frequency (med 3), highest spend (med 118), highest future conversion (35.02%)."
+    },
+    "2": {
+      "cluster_id": 2,
+      "name_en": "At-Risk Cooling-Down Spenders",
+      "name_vi": "Khách Chi Tiêu Khá Đang Hạ Nhiệt / Nguy Cơ Rời Bỏ",
+      "rationale": "Moderate recency (med 54d), substantial past spend (med 67), cooling engagement (-0.69), moderate future conversion (7.32%)."
+    },
+    "3": {
+      "cluster_id": 3,
+      "name_en": "Recently Active Repeat Prospects",
+      "name_vi": "Khách Mua Gần Đây & Duyệt Web Tích Cực / Triển Vọng Mua Lại",
+      "rationale": "Very recent purchase (med 16d), high 30d web browsing (3 sess, 8 views), surging momentum (+1.10), high future activity (35.03%) & conversion (10.13%)."
+    }
+  }
+}

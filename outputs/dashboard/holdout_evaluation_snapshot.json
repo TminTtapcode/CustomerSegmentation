@@ -1,0 +1,162 @@
+{
+  "manifest_version": "1.0",
+  "phase": "Phase 5: Model Evaluation & Business Segment Profiling",
+  "created_at": "2026-11-09T16:10:42Z",
+  "model_freeze": {
+    "model_version": "v1.0.0-f1-std-k4",
+    "model_path": "outputs/models/kmeans_best_model.joblib",
+    "model_sha256": "ab98e132480914abb028c8009fd090030eef73ebf0faee2fa6dbd05e13dc9bfc",
+    "frozen_at": "2026-11-09T16:10:27Z",
+    "algorithm": "Standard KMeans",
+    "feature_space": "F1 (7D: RFM + 4 Clickstream Engagement)",
+    "feature_names": [
+      "recency_days",
+      "frequency",
+      "monetary",
+      "sessions_30d",
+      "views_30d",
+      "cart_sessions_30d",
+      "log_activity_ratio"
+    ],
+    "preprocessing": "Log1p on skewed non-negative features + StandardScaler",
+    "k_clusters": 4,
+    "random_seed": 42,
+    "n_init": 20,
+    "observation_cutoff": "2020-02-01T00:00:00Z",
+    "training_cohort_size": 92652
+  },
+  "audit_findings": {
+    "purchase_duplicates_reconciliation": {
+      "all_5_months_total": 905,
+      "observation_window": 793,
+      "holdout_window": 112,
+      "explanation": "905 is the exact sum of 793 Observation duplicates and 112 Holdout duplicates across the identical 9-field deduplication key."
+    },
+    "model_selection_justification": {
+      "k4_over_k3": "In K=3, Cluster 0 and Cluster 2 are merged into a giant 64.3% cluster. K=4 separates the high-intent cooling-down buyers (Cluster 2: 7.32% future conversion, $4.28 spend) from true dormant bouncers (Cluster 0: 2.66% conversion, $0.91 spend), creating critical actionable distinction for retention marketing.",
+      "standard_over_robust": "StandardScaler maintains isotropic variance proportions after log1p transformation without exaggerating near-zero IQRs of integer count variables."
+    }
+  },
+  "holdout_evaluation_metrics": [
+    {
+      "cluster_id": 0,
+      "business_label_en": "Dormant Low-Value Single Buyers",
+      "business_label_vi": "Khách Mua 1 Lần Ngủ Đông Giá Trị Thấp",
+      "n_customers": 42145,
+      "future_active_users": 4507,
+      "future_activity_rate_pct": 10.694,
+      "future_activity_rate_ci_95": [
+        10.403,
+        10.993
+      ],
+      "future_buyers": 1120,
+      "future_purchase_rate_pct": 2.6575,
+      "future_purchase_rate_ci_95": [
+        2.508,
+        2.815
+      ],
+      "future_total_sessions": 14948,
+      "future_total_purchase_sessions": 1217,
+      "future_total_spend": 38496.82,
+      "future_spend_per_customer": 0.9134,
+      "future_spend_per_buyer": 34.3722
+    },
+    {
+      "cluster_id": 1,
+      "business_label_en": "Core VIP Champions",
+      "business_label_vi": "Khách VIP Trung Thành Cốt Lõi",
+      "n_customers": 8755,
+      "future_active_users": 6345,
+      "future_activity_rate_pct": 72.4729,
+      "future_activity_rate_ci_95": [
+        71.528,
+        73.398
+      ],
+      "future_buyers": 3066,
+      "future_purchase_rate_pct": 35.02,
+      "future_purchase_rate_ci_95": [
+        34.028,
+        36.026
+      ],
+      "future_total_sessions": 82381,
+      "future_total_purchase_sessions": 4462,
+      "future_total_spend": 226329.95,
+      "future_spend_per_customer": 25.8515,
+      "future_spend_per_buyer": 73.8193
+    },
+    {
+      "cluster_id": 2,
+      "business_label_en": "At-Risk Cooling-Down Spenders",
+      "business_label_vi": "Khách Chi Tiêu Khá Đang Hạ Nhiệt / Nguy Cơ Rời Bỏ",
+      "n_customers": 18608,
+      "future_active_users": 3960,
+      "future_activity_rate_pct": 21.2812,
+      "future_activity_rate_ci_95": [
+        20.699,
+        21.875
+      ],
+      "future_buyers": 1363,
+      "future_purchase_rate_pct": 7.3248,
+      "future_purchase_rate_ci_95": [
+        6.959,
+        7.708
+      ],
+      "future_total_sessions": 18015,
+      "future_total_purchase_sessions": 1576,
+      "future_total_spend": 79597.53,
+      "future_spend_per_customer": 4.2776,
+      "future_spend_per_buyer": 58.3988
+    },
+    {
+      "cluster_id": 3,
+      "business_label_en": "Recently Active Repeat Prospects",
+      "business_label_vi": "Khách Mua Gần Đây & Duyệt Web Tích Cực / Triển Vọng Mua Lại",
+      "n_customers": 23144,
+      "future_active_users": 8107,
+      "future_activity_rate_pct": 35.0285,
+      "future_activity_rate_ci_95": [
+        34.416,
+        35.646
+      ],
+      "future_buyers": 2344,
+      "future_purchase_rate_pct": 10.1279,
+      "future_purchase_rate_ci_95": [
+        9.746,
+        10.523
+      ],
+      "future_total_sessions": 39005,
+      "future_total_purchase_sessions": 2714,
+      "future_total_spend": 113749.02,
+      "future_spend_per_customer": 4.9148,
+      "future_spend_per_buyer": 48.5277
+    }
+  ],
+  "non_buyers_benchmark": {
+    "cohort": "Non-Buyers (Observation)",
+    "n_customers": 1248847,
+    "future_active_users": 70277,
+    "future_activity_rate_pct": 5.6274,
+    "future_activity_rate_ci_95": [
+      5.587,
+      5.668
+    ],
+    "future_buyers": 5278,
+    "future_purchase_rate_pct": 0.4226,
+    "future_purchase_rate_ci_95": [
+      0.411,
+      0.434
+    ],
+    "future_total_spend": 245011.2,
+    "future_spend_per_customer": 0.1962
+  },
+  "figures": [
+    "outputs/figures/fig17_future_purchase_rate.png",
+    "outputs/figures/fig18_future_spend_per_customer.png",
+    "outputs/figures/fig19_segment_transition_sankey.png",
+    "outputs/figures/fig20_cluster_profiles_comprehensive.png"
+  ],
+  "resource_benchmark": {
+    "total_runtime_sec": 25.85,
+    "peak_rss_mb": 211.06
+  }
+}

@@ -1,0 +1,344 @@
+{
+  "version": "phase0-draft-v2",
+  "note": "JSON-compatible YAML 1.2 to validate with Python standard library; values represent definitions and data contracts, not measured metrics.",
+  "common": {
+    "source": "REES46",
+    "grain_warning": "event, user, visitor, session, purchase-session và order là các khái niệm hoàn toàn khác nhau về cấp độ hạt dữ liệu (grain).",
+    "session_key": [
+      "user_id",
+      "user_session"
+    ],
+    "timezone": "UTC",
+    "window_convention": "[start_inclusive,end_exclusive)",
+    "missing_user_policy": "Loại khỏi KPI cấp user/session; thống kê riêng vào báo cáo Data Quality trong Phase 1.",
+    "missing_session_policy": "Loại khỏi KPI cấp session/purchase-session; thống kê riêng tỷ lệ thiếu session của từng loại sự kiện trong Phase 1.",
+    "future_campaign_kpis_not_observable": true,
+    "entity_glossary": {
+      "event": "Một bản ghi sự kiện tương tác đơn lẻ (view, cart, remove_from_cart, purchase) tại một thời điểm UTC.",
+      "session": "Một chuỗi tương tác liên tục của người dùng, định danh duy nhất bằng cặp composite (user_id, user_session).",
+      "user": "Một cá nhân người dùng duy nhất được xác định thông qua user_id hợp lệ trong dataset.",
+      "visitor": "Khách thể truy cập website; bao gồm người dùng có user_id và khách ẩn danh nếu user_id bị khuyết.",
+      "buyer": "Người dùng quan sát có ít nhất 1 sự kiện purchase hợp lệ trong cửa sổ quan sát [observation_start, observation_end).",
+      "purchase_session": "Một phiên tương tác hợp lệ có chứa ít nhất 1 sự kiện purchase; dùng làm proxy đại diện cho giao dịch mua hàng.",
+      "order": "Mã đơn hàng chính thức từ hệ thống bán hàng/OMS. REES46 hoàn toàn KHÔNG có trường order_id; không được coi mỗi purchase event là một đơn độc lập."
+    }
+  },
+  "metrics": [
+    {
+      "id": "observed_user_count",
+      "name": "Số người dùng quan sát",
+      "business_meaning": "Quy mô tệp người dùng định danh hoạt động trên nền tảng trong cửa sổ quan sát, phản ánh kích thước cơ sở khách hàng tiếp cận được.",
+      "grain": "user",
+      "time_window": "observation",
+      "formula": "COUNT(DISTINCT user_id) WHERE user_id IS NOT NULL AND TRIM(user_id) != ''",
+      "unit": "users",
+      "source_columns": [
+        "user_id",
+        "event_time"
+      ],
+      "missing_policy": "Loại bỏ bản ghi có user_id null hoặc chuỗi rỗng; đếm riêng số bản ghi bị khuyết để báo cáo chất lượng.",
+      "zero_denominator_policy": "Không áp dụng (đây là phép đếm số lượng).",
+      "observability": "measurable_after_p1",
+      "caveat": "Chỉ tính người dùng quan sát được trong cửa sổ Oct 2019 - Jan 2020; không đại diện cho tổng khách hàng toàn thời gian (lifetime customers).",
+      "hand_calculation_example": "Nếu tập dữ liệu có các user_id: ['u1', 'u1', 'u2', null, 'u3'], sau khi lọc null còn ['u1', 'u2', 'u3'] => observed_user_count = 3 users."
+    },
+    {
+      "id": "observed_buyer_count",
+      "name": "Số người có mua trong observation",
+      "business_meaning": "Quy mô tệp khách hàng đã từng thực hiện chuyển đổi mua hàng thành công, dùng để phân tách tập buyers phục vụ phân cụm RFM.",
+      "grain": "user",
+      "time_window": "observation",
+      "formula": "COUNT(DISTINCT user_id) WHERE event_type = 'purchase' AND user_id IS NOT NULL AND TRIM(user_id) != ''",
+      "unit": "users",
+      "source_columns": [
+        "user_id",
+        "event_time",
+        "event_type"
+      ],
+      "missing_policy": "Chỉ xét các bản ghi có user_id hợp lệ và event_type = 'purchase'.",
+      "zero_denominator_policy": "Không áp dụng (phép đếm số lượng).",
+      "observability": "measurable_after_p1",
+      "caveat": "Chỉ xác nhận người dùng có mua trong cửa sổ quan sát; người chưa mua trong cửa sổ (observed non-buyers) có thể đã mua trước tháng 10/2019.",
+      "hand_calculation_example": "User u1 có 3 purchase, u2 có 1 purchase, u3 chỉ có view/cart => observed_buyer_count = 2 users (u1 và u2)."
+    },
+    {
+      "id": "purchase_session_count_proxy",
+      "name": "Số phiên có mua (proxy giao dịch)",
+      "business_meaning": "Tổng số phiên tương tác dẫn đến mua hàng thành công; đóng vai trò là proxy ước lượng số lần mua hàng do dataset không có order_id.",
+      "grain": "purchase_session",
+      "time_window": "observation",
+      "formula": "COUNT(DISTINCT (user_id, user_session)) WHERE event_type = 'purchase' AND user_id IS NOT NULL AND user_session IS NOT NULL",
+      "unit": "purchase_sessions",
+      "source_columns": [
+        "user_id",
+        "user_session",
+        "event_type",
+        "event_time"
+      ],
+      "missing_policy": "Loại bỏ các purchase event bị khuyết user_session hoặc user_id khỏi KPI cấp session; ghi nhận số lượng bị loại vào data quality audit.",
+      "zero_denominator_policy": "Không áp dụng (phép đếm số lượng).",
+      "observability": "measurable_after_p1",
+      "caveat": "Không đồng nghĩa với số lượng đơn hàng (order_id); một phiên có thể mua nhiều mặt hàng hoặc khách thanh toán nhiều lần trong cùng phiên.",
+      "hand_calculation_example": "User u1 mua 2 mặt hàng trong session s1, và 1 mặt hàng trong session s2 => purchase_session_count_proxy = 2 purchase sessions (s1 và s2)."
+    },
+    {
+      "id": "purchase_session_rate",
+      "name": "Tỷ lệ phiên có mua",
+      "business_meaning": "Xác suất một phiên truy cập hợp lệ chuyển đổi thành phiên mua hàng thành công, phản ánh hiệu suất chuyển đổi phiên trên website.",
+      "grain": "session",
+      "time_window": "observation",
+      "numerator": "Distinct valid (user_id, user_session) pairs with at least one purchase event",
+      "denominator": "Distinct valid (user_id, user_session) pairs with at least one event of any valid type",
+      "formula": "numerator / denominator",
+      "unit": "ratio",
+      "source_columns": [
+        "user_id",
+        "user_session",
+        "event_type",
+        "event_time"
+      ],
+      "missing_policy": "Các bản ghi khuyết user_id hoặc user_session bị loại khỏi cả tử số và mẫu số để đảm bảo tính nhất quán của grain phiên.",
+      "zero_denominator_policy": "Nếu denominator = 0, trả về null (None), không gán bằng 0 hoặc 1.",
+      "observability": "measurable_after_p1",
+      "caveat": "Mẫu số là số phiên hợp lệ (distinct sessions), tuyệt đối không dùng tổng số sự kiện (events) làm mẫu số.",
+      "hand_calculation_example": "Tổng cộng có 4 phiên hợp lệ (s1, s2, s3, s4). Trong đó s1 và s2 có purchase, s3 chỉ có cart, s4 chỉ có view => purchase_session_rate = 2 / 4 = 0.5 (50%)."
+    },
+    {
+      "id": "cart_session_rate",
+      "name": "Tỷ lệ phiên có thêm giỏ",
+      "business_meaning": "Tỷ lệ các phiên tương tác thể hiện ý định mua sắm ban đầu bằng cách đưa ít nhất một sản phẩm vào giỏ hàng.",
+      "grain": "session",
+      "time_window": "observation",
+      "numerator": "Distinct valid (user_id, user_session) pairs with at least one cart event",
+      "denominator": "Distinct valid (user_id, user_session) pairs with at least one event of any valid type",
+      "formula": "numerator / denominator",
+      "unit": "ratio",
+      "source_columns": [
+        "user_id",
+        "user_session",
+        "event_type",
+        "event_time"
+      ],
+      "missing_policy": "Loại bỏ các sự kiện khuyết user_id hoặc user_session khỏi cả tử số và mẫu số.",
+      "zero_denominator_policy": "Nếu denominator = 0, trả về null (None).",
+      "observability": "measurable_after_p1",
+      "caveat": "Chỉ phản ánh hành vi thêm giỏ tại cấp phiên, không đo lường số lượng sản phẩm hay giá trị giỏ hàng.",
+      "hand_calculation_example": "Trong 4 phiên hợp lệ (s1, s2, s3, s4), s1 và s3 có sự kiện cart => cart_session_rate = 2 / 4 = 0.5 (50%)."
+    },
+    {
+      "id": "cart_to_purchase_same_session_rate",
+      "name": "Tỷ lệ phiên cart tiếp tục purchase",
+      "business_meaning": "Hiệu suất hoàn tất đơn hàng ngay trong cùng một phiên sau khi đã thêm vào giỏ, giúp phát hiện nút thắt tại bước thanh toán.",
+      "grain": "session",
+      "time_window": "observation",
+      "numerator": "Distinct valid sessions where max(purchase_time) > min(cart_time) in same session",
+      "denominator": "Distinct valid sessions with at least one cart event",
+      "formula": "numerator / denominator",
+      "unit": "ratio",
+      "source_columns": [
+        "user_id",
+        "user_session",
+        "event_type",
+        "event_time"
+      ],
+      "missing_policy": "Loại bỏ phiên khuyết mã phiên; yêu cầu timestamp UTC hợp lệ để kiểm tra trật tự thời gian nghiêm ngặt.",
+      "zero_denominator_policy": "Nếu không có phiên nào có cart (denominator = 0), trả về null (None).",
+      "observability": "measurable_after_p1",
+      "caveat": "Chỉ đo chuyển đổi trong cùng một phiên; khách thêm giỏ hôm nay và quay lại mua ở phiên khác ngày mai sẽ không được tính vào tử số của phiên này.",
+      "hand_calculation_example": "Có 2 phiên có cart (s1, s3). Phiên s1 có cart lúc 12:01 và purchase lúc 12:02 (hợp lệ). Phiên s3 có cart nhưng không có purchase => rate = 1 / 2 = 0.5 (50%)."
+    },
+    {
+      "id": "repeat_buyer_rate_proxy",
+      "name": "Tỷ lệ buyers có >=2 purchase sessions",
+      "business_meaning": "Tỷ lệ khách hàng mua lặp lại (loyalty proxy), phản ánh khả năng giữ chân khách hàng của doanh nghiệp.",
+      "grain": "buyer",
+      "time_window": "observation",
+      "numerator": "Count of buyers with >= 2 distinct valid purchase sessions",
+      "denominator": "Count of buyers with >= 1 valid purchase session",
+      "formula": "numerator / denominator",
+      "unit": "ratio",
+      "source_columns": [
+        "user_id",
+        "user_session",
+        "event_type",
+        "event_time"
+      ],
+      "missing_policy": "Những buyer có purchase nhưng tất cả các purchase đều bị khuyết user_session sẽ bị loại khỏi mẫu số do không xác định được frequency theo phiên.",
+      "zero_denominator_policy": "Nếu không có buyer hợp lệ nào trong kỳ quan sát, trả về null (None).",
+      "observability": "measurable_after_p1",
+      "caveat": "Định nghĩa theo phiên mua hàng (purchase sessions); 1 buyer mua 5 sản phẩm trong cùng 1 phiên vẫn chỉ có frequency = 1 (chưa phải repeat buyer).",
+      "hand_calculation_example": "Có 2 buyers: u1 có 2 purchase sessions (s1, s2); u4 có 1 purchase session (s7) => repeat_buyer_rate_proxy = 1 / 2 = 0.5 (50%)."
+    },
+    {
+      "id": "buyer_recency_days",
+      "name": "Recency của buyers",
+      "business_meaning": "Số ngày trôi qua kể từ lần mua sắm cuối cùng của khách hàng cho tới mốc thời gian chốt dữ liệu (cutoff), đo lường độ mới của giao dịch.",
+      "grain": "buyer",
+      "time_window": "at_observation_cutoff",
+      "formula": "(cutoff_datetime_utc - MAX(purchase_event_time_utc)).total_seconds() / 86400.0",
+      "unit": "days",
+      "source_columns": [
+        "user_id",
+        "event_type",
+        "event_time"
+      ],
+      "missing_policy": "Chỉ tính trên sự kiện purchase có timestamp UTC hợp lệ trước cutoff.",
+      "zero_denominator_policy": "Không áp dụng.",
+      "observability": "measurable_after_p1",
+      "caveat": "KHÔNG ĐỊNH NGHĨA (undefined) đối với non-buyers; tuyệt đối không gán giá trị giả tạo như 0, 999 hoặc vô cùng (inf) vì sẽ làm sai lệch cấu trúc khoảng cách Euclidean trong K-Means.",
+      "hand_calculation_example": "Cutoff = 2020-02-01T00:00:00Z. User u1 có lần mua cuối lúc 2020-01-20T12:00:00Z. Khoảng cách = 11 ngày 12 giờ = 11.5 ngày."
+    },
+    {
+      "id": "buyer_frequency_proxy",
+      "name": "Frequency (Số phiên mua hàng)",
+      "business_meaning": "Tổng số phiên mua sắm độc lập của một buyer trong toàn bộ thời gian quan sát, đo lường tần suất phát sinh giao dịch.",
+      "grain": "buyer",
+      "time_window": "observation",
+      "formula": "COUNT(DISTINCT user_session) WHERE user_id = u AND event_type = 'purchase' AND user_session IS NOT NULL",
+      "unit": "purchase_sessions",
+      "source_columns": [
+        "user_id",
+        "user_session",
+        "event_type",
+        "event_time"
+      ],
+      "missing_policy": "Các purchase event khuyết user_session không được cộng vào frequency theo phiên; phải kiểm tra và báo cáo tỷ lệ mất mát dữ liệu phiên.",
+      "zero_denominator_policy": "Không áp dụng.",
+      "observability": "measurable_after_p1",
+      "caveat": "Là proxy đếm theo phiên, không phải số đơn hàng OMS (order_id) và không phải tổng số dòng sự kiện purchase.",
+      "hand_calculation_example": "User u1 thực hiện 2 purchase events trong session s1, và 1 purchase event trong session s2 => buyer_frequency_proxy = 2 purchase sessions."
+    },
+    {
+      "id": "buyer_monetary_observed",
+      "name": "Monetary quan sát",
+      "business_meaning": "Tổng giá trị tiền tệ từ các sự kiện mua hàng được ghi nhận của khách hàng trong kỳ quan sát.",
+      "grain": "buyer",
+      "time_window": "observation",
+      "formula": "SUM(price) WHERE user_id = u AND event_type = 'purchase' AND price IS NOT NULL AND price > 0",
+      "unit": "dataset_price_unit_unverified",
+      "source_columns": [
+        "user_id",
+        "event_type",
+        "price",
+        "event_time"
+      ],
+      "missing_policy": "Bỏ qua các dòng purchase có price null hoặc price <= 0; kiểm tra phân phối giá trị bất thường trong Phase 1.",
+      "zero_denominator_policy": "Không áp dụng.",
+      "observability": "measurable_after_p1",
+      "caveat": "Chưa phản ánh doanh thu ròng (net GMV) vì dataset không chứa thông tin số lượng mua (quantity), mã giảm giá hay dữ liệu trả hàng/hoàn tiền (refunds). Đơn vị tiền tệ chưa xác minh.",
+      "hand_calculation_example": "User u1 mua sản phẩm A giá 10.5 và sản phẩm B giá 15.0 trong s1, sản phẩm C giá 20.0 trong s2 => buyer_monetary_observed = 10.5 + 15.0 + 20.0 = 45.5."
+    },
+    {
+      "id": "sessions_recent_30d",
+      "name": "Session gần đây (30 ngày)",
+      "business_meaning": "Mức độ hiện diện và tương tác của người dùng trên website trong 30 ngày sát trước mốc cutoff [cutoff - 30d, cutoff).",
+      "grain": "user",
+      "time_window": "[cutoff-30d,cutoff)",
+      "formula": "COUNT(DISTINCT (user_id, user_session)) WHERE user_id = u AND event_time >= (cutoff - 30 days) AND event_time < cutoff AND user_session IS NOT NULL",
+      "unit": "sessions",
+      "source_columns": [
+        "user_id",
+        "user_session",
+        "event_time"
+      ],
+      "missing_policy": "Yêu cầu user_session hợp lệ.",
+      "zero_denominator_policy": "Không áp dụng; nếu không có session nào thì giá trị bằng 0.",
+      "observability": "measurable_after_p1",
+      "caveat": "Phụ thuộc vào tính liên tục của tracking log; chỉ tính các phiên có ít nhất một sự kiện được ghi nhận.",
+      "hand_calculation_example": "Cutoff = 2020-02-01. Cửa sổ recent: [2020-01-02, 2020-02-01). User u1 có session s1 (ngày 15/01) và s2 (ngày 20/01) => sessions_recent_30d = 2 sessions."
+    },
+    {
+      "id": "product_views_recent_30d",
+      "name": "Lượt xem sản phẩm gần đây (30 ngày)",
+      "business_meaning": "Cường độ tìm hiểu và khám phá danh mục hàng hóa của người dùng trong 30 ngày gần nhất sát cutoff.",
+      "grain": "user",
+      "time_window": "[cutoff-30d,cutoff)",
+      "formula": "COUNT(*) WHERE user_id = u AND event_type = 'view' AND event_time >= (cutoff - 30 days) AND event_time < cutoff",
+      "unit": "view_events",
+      "source_columns": [
+        "user_id",
+        "event_type",
+        "event_time"
+      ],
+      "missing_policy": "Chỉ tính các sự kiện view có timestamp UTC hợp lệ trong cửa sổ.",
+      "zero_denominator_policy": "Không áp dụng; nếu không có view nào thì giá trị bằng 0.",
+      "observability": "measurable_after_p1",
+      "caveat": "Một người dùng có thể xem lặp lại cùng một product_id nhiều lần; đây là tổng lượt view sự kiện, không phải distinct products viewed.",
+      "hand_calculation_example": "Trong 30 ngày gần nhất, u1 xem 5 sản phẩm khác nhau và xem lại 1 sản phẩm 3 lần => product_views_recent_30d = 8 view_events."
+    },
+    {
+      "id": "activity_ratio",
+      "name": "Xu hướng session có smoothing",
+      "business_meaning": "Tỷ số biến động tần suất phiên giữa 30 ngày gần nhất so với 30 ngày liền trước, được làm mượt bằng hằng số cộng Laplace (+1) để xử lý mẫu số bằng 0.",
+      "grain": "user",
+      "time_window": "recent_30d_vs_previous_30d",
+      "formula": "(sessions_recent_30d + 1) / (sessions_previous_30d + 1)",
+      "unit": "ratio",
+      "source_columns": [
+        "user_id",
+        "user_session",
+        "event_time"
+      ],
+      "missing_policy": "Yêu cầu cả hai cửa sổ thời gian tính trên các phiên hợp lệ.",
+      "zero_denominator_policy": "Nhờ có hằng số làm mượt (+1), mẫu số luôn tối thiểu là 1, không bao giờ xảy ra chia cho 0.",
+      "observability": "measurable_after_p1",
+      "caveat": "Khi cả hai kỳ đều bằng 0 phiên (0/0), công thức cho ra giá trị 1.0; giá trị 1.0 này là do hiệu ứng làm mượt toán học, KHÔNG phản ánh người dùng đang duy trì hoạt động ổn định. Phải đi kèm với sessions_recent và activity_delta.",
+      "hand_calculation_example": "User có previous = 0, recent = 10 => activity_ratio = (10 + 1) / (0 + 1) = 11.0. User có previous = 20, recent = 5 => activity_ratio = (5 + 1) / (20 + 1) = 6/21 ≈ 0.286."
+    },
+    {
+      "id": "activity_delta",
+      "name": "Chênh lệch tuyệt đối số phiên tương tác",
+      "business_meaning": "Mức tăng hoặc giảm số phiên tương tác tuyệt đối giữa 30 ngày gần nhất và 30 ngày trước đó, bổ trợ cho activity_ratio nhằm phản ánh đúng quy mô thay đổi.",
+      "grain": "user",
+      "time_window": "recent_30d_vs_previous_30d",
+      "formula": "sessions_recent_30d - sessions_previous_30d",
+      "unit": "sessions",
+      "source_columns": [
+        "user_id",
+        "user_session",
+        "event_time"
+      ],
+      "missing_policy": "Tính trên các phiên hợp lệ được gán cho từng cửa sổ.",
+      "zero_denominator_policy": "Không áp dụng (phép trừ số học).",
+      "observability": "measurable_after_p1",
+      "caveat": "Có thể mang giá trị âm khi người dùng suy giảm tương tác.",
+      "hand_calculation_example": "User có recent = 5, previous = 20 => activity_delta = 5 - 20 = -15 sessions (suy giảm mạnh)."
+    },
+    {
+      "id": "future_purchase_rate_by_segment",
+      "name": "Tỷ lệ mua kỳ sau theo cụm",
+      "business_meaning": "Tỷ lệ người dùng trong từng phân cụm (được gán nhãn tại cutoff) có phát sinh ít nhất một giao dịch mua hàng trong tháng kiểm chứng độc lập (tháng 02/2020).",
+      "grain": "segment",
+      "time_window": "future_february_holdout",
+      "numerator": "Count of cohort users in segment with >= 1 purchase event in [2020-02-01, 2020-03-01)",
+      "denominator": "Total count of cohort users assigned to that segment at cutoff 2020-02-01",
+      "formula": "numerator / denominator",
+      "unit": "ratio",
+      "source_columns": [
+        "user_id",
+        "event_type",
+        "event_time"
+      ],
+      "missing_policy": "Chỉ đánh giá trên cohort người dùng đã tồn tại trong kỳ observation và được gán cụm; người dùng mới xuất hiện trong tháng 2 không thuộc mẫu số.",
+      "zero_denominator_policy": "Nếu cụm không có thành viên nào (denominator = 0), trả về null (None).",
+      "observability": "measurable_after_p5",
+      "caveat": "Chỉ sử dụng một lần duy nhất cho mục đích hậu kiểm mô hình (post-hoc evaluation); tuyệt đối không dùng metric này để quay ngược lại tinh chỉnh siêu tham số K hay chọn tập đặc trưng nhằm bảo toàn tính toàn vẹn của tập holdout.",
+      "hand_calculation_example": "Cụm VIP có 100 khách hàng tại ngày 01/02/2020. Trong tháng 2, có 42 khách hàng trong số này phát sinh ít nhất 1 purchase => future_purchase_rate = 42 / 100 = 0.42 (42%)."
+    },
+    {
+      "id": "campaign_incremental_profit",
+      "name": "Lợi nhuận tăng thêm chiến dịch",
+      "business_meaning": "Lợi nhuận gộp ròng gia tăng thu được từ chiến dịch marketing can thiệp so với nhóm đối chứng không nhận can thiệp, sau khi trừ chi phí marketing.",
+      "grain": "campaign",
+      "time_window": "future_after_experiment",
+      "formula": "(Conversion_treatment - Conversion_control) * Sample_size * Gross_margin - Marketing_campaign_cost",
+      "unit": "currency",
+      "source_columns": [],
+      "missing_policy": "Không áp dụng do dataset REES46 không có dữ liệu chiến dịch.",
+      "zero_denominator_policy": "Không áp dụng.",
+      "observability": "not_observable_with_REES46",
+      "caveat": "REES46 là log sự kiện tự nhiên, hoàn toàn không có thông tin can thiệp (treatment/control), chi phí chiến dịch hay biên lợi nhuận gộp. Không được tự bịa số liệu mẫu và gán mác là 'ROI thực tế'.",
+      "hand_calculation_example": "Không thể tính toán trên REES46; được đưa vào hợp đồng dữ liệu như một ranh giới rõ ràng giữa phân tích phân khúc và đánh giá nhân quả."
+    }
+  ]
+}

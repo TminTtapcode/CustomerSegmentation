@@ -1,0 +1,110 @@
+{
+  "project_name": "Customer Behavior Analytics and Segmentation for Marketing Decision Support",
+  "project_name_vi": "Phân tích và phân khúc khách hàng dựa trên hành vi mua sắm và tương tác website nhằm hỗ trợ ra quyết định marketing trong thương mại điện tử",
+  "phase": "P2_DATA_PREPARATION",
+  "duration_days": 21,
+  "dataset": {
+    "name": "REES46 eCommerce Events History in Cosmetics Shop",
+    "url": "https://www.kaggle.com/datasets/mkechinov/ecommerce-events-history-in-cosmetics-shop",
+    "source_type": "external_research_demo",
+    "source_domain": "cosmetics",
+    "dashboard_target": "IVRE_as_view_only",
+    "raw_glob": "data/raw/*.csv",
+    "verified_local": true,
+    "expected_columns_pending_verification": [
+      "event_time",
+      "event_type",
+      "product_id",
+      "category_id",
+      "category_code",
+      "brand",
+      "price",
+      "user_id",
+      "user_session"
+    ],
+    "event_types_expected": [
+      "view",
+      "cart",
+      "remove_from_cart",
+      "purchase"
+    ],
+    "timezone": "UTC",
+    "price_currency": "unknown_requires_verification",
+    "order_id_present": false,
+    "frequency_semantics": "distinct_purchase_sessions_proxy",
+    "monetary_semantics": "sum_purchase_event_price_no_refunds_or_quantity_assumption"
+  },
+  "time": {
+    "observation_start_inclusive": "2019-10-01T00:00:00Z",
+    "observation_end_exclusive": "2020-02-01T00:00:00Z",
+    "future_start_inclusive": "2020-02-01T00:00:00Z",
+    "future_end_exclusive": "2020-03-01T00:00:00Z",
+    "recent_days": 30,
+    "previous_days": 30,
+    "holdout_used_for_tuning": false
+  },
+  "model": {
+    "primary": "KMeans",
+    "benchmark_optional": "MiniBatchKMeans",
+    "candidate_clusters": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "feature_sets": {
+      "F0": [
+        "recency_days",
+        "purchase_sessions",
+        "observed_purchase_value"
+      ],
+      "F1": [
+        "F0",
+        "sessions_recent_30d",
+        "product_views_recent_30d"
+      ],
+      "F2_optional": [
+        "F1",
+        "sessions_previous_30d",
+        "activity_delta",
+        "activity_log_ratio"
+      ]
+    },
+    "random_seed": 42,
+    "required_model_metrics": [
+      "silhouette_sampled",
+      "davies_bouldin",
+      "cluster_sizes",
+      "stability_ari",
+      "future_purchase_rate_by_segment"
+    ]
+  },
+  "performance": {
+    "measure": [
+      "wall_time_seconds",
+      "sampled_peak_rss_bytes",
+      "baseline_rss_bytes",
+      "throughput",
+      "input_size_bytes",
+      "output_size_bytes"
+    ],
+    "threads": "to_be_measured_or_set_on_machine",
+    "duckdb_memory_limit": "to_be_configured_after_hardware_profile",
+    "hard_sla": "TBD_AFTER_BASELINE_NOT_UNIVERSAL",
+    "selection_principle": "hard_constraints_then_tradeoff_matrix_and_pareto_no_weighted_accuracy",
+    "benchmark_isolation": "fresh_process_and_repeat_runs"
+  },
+  "marketing": {
+    "mode": "explainable_rule_based",
+    "campaign_effect_data_present": false,
+    "real_email_execution": false,
+    "strategy_status": "RECOMMENDED_NOT_VALIDATED"
+  },
+  "reports": [
+    "reports/DATA_ANALYTICS_REPORT.md",
+    "reports/TECHNICAL_LEARNING_NOTES.md"
+  ]
+}
